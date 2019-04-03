@@ -11,7 +11,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: yarn deploy:prod
+      - run: yarn deploy
 
 workflows:
   build:
