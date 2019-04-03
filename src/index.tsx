@@ -1,5 +1,7 @@
 import { h, render } from 'preact'
 
+import { App } from './components/App'
+
 const el = document.querySelector('#app')!
 
-render(<h1>Imprint</h1>, el)
+render(<App />, el)
