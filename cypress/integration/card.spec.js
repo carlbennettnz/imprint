@@ -3,11 +3,11 @@
 context('Card', () => {
   before(() => cy.visit('/'))
 
-  it('is shows the pinyin', () => {
+  it('it shows the pinyin', () => {
     cy.get('[data-test-pinyin]').should('have.text', 'wǒ')
   })
 
-  it('is shows the characters', () => {
+  it('it shows the characters', () => {
     cy.get('[data-test-characters]').should('have.text', '我')
   })
 })
