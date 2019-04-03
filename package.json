@@ -2,16 +2,19 @@
   "name": "imprint",
   "version": "1.0.0",
   "description": "🇨🇳 Learn Chinese with flash cards",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:carlbennettnz/imprint.git",
   "author": "Carl Bennett <carlbennettnz@gmail.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "rm -f dist/* && parcel build src/index.html"
+    "build": "rm -f dist/* && parcel build src/index.html",
+    "serve": "cd dist && serve"
   },
   "devDependencies": {
-    "parcel": "^1.12.3"
+    "cypress": "^3.2.0",
+    "parcel": "^1.12.3",
+    "serve": "^10.1.2"
   }
 }
