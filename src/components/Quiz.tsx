@@ -1,27 +1,30 @@
 import { h, Component } from 'preact'
 import { Link } from 'preact-router'
 
-import { QuizItem } from '../types/QuizItem'
 import { Card } from './Card'
 import { QuizInput } from './QuizInput'
 import { Feedback } from './Feedback'
-
-const LESSON: QuizItem[] = [
-  { zh: { pinyin: 'wǒ', characters: '我' }, en: ['I', 'me', 'myself'] },
-  { zh: { pinyin: 'nǐ', characters: '你' }, en: ['you'] }
-]
+import { LESSONS } from '../data/lessons'
 
 const ENTER_KEYCODE = 13
 
-type AppState = {
+type QuizProps = {
+  lesson?: string
+}
+
+type QuizState = {
   guess: string | null
   currentIndex: number
 }
 
-export class Quiz extends Component<{}, AppState> {
+export class Quiz extends Component<QuizProps, QuizState> {
   state = {
     guess: null,
     currentIndex: 0
+  }
+
+  get lesson() {
+    return LESSONS.find(({ slug }) => slug === this.props.lesson)!
   }
 
   componentWillMount() {
@@ -40,7 +43,7 @@ export class Quiz extends Component<{}, AppState> {
 
     this.setState({
       guess: null,
-      currentIndex: (this.state.currentIndex + 1) % LESSON.length
+      currentIndex: (this.state.currentIndex + 1) % lesson.length
     })
   }
 
@@ -50,7 +53,7 @@ export class Quiz extends Component<{}, AppState> {
 
   render() {
     const isSubmitted = this.state.guess !== null
-    const item = LESSON[this.state.currentIndex]
+    const item = this.lesson.items[this.state.currentIndex]
 
     return (
       <div>
@@ -61,7 +64,7 @@ export class Quiz extends Component<{}, AppState> {
           >
             ← Lessons
           </Link>
-          <h2 className="text-base text-grey-darker">Lesson 1</h2>
+          <h2 className="text-base text-grey-darker">{this.lesson.titleShort}</h2>
           <div className="text-grey ml-auto opacity-0">← Lessons</div> {/* just for alignment */}
         </header>
 
