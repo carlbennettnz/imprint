@@ -21,13 +21,17 @@ export class QuizInput extends Component<QuizInputProps> {
 
   handleSubmit(event: Event) {
     event.preventDefault()
-    this.props.submit(this.state.answer)
+
+    if (this.state.answer.trim().length > 0) {
+      this.props.submit(this.state.answer)
+    }
   }
 
   render() {
     return (
-      <form data-test-quiz-form onSubmit={(event: Event) => this.handleSubmit(event)}>
+      <form className="w-full px-16" data-test-quiz-form onSubmit={(event: Event) => this.handleSubmit(event)}>
         <input
+          className="w-full text-2xl text-center py-2 border-b-2 outline-none focus:border-blue"
           data-test-quiz-input
           ref={input => { this.input = input }}
           value={this.state.answer}

@@ -17,7 +17,7 @@ type AppState = {
   currentIndex: number
 }
 
-export class App extends Component<null, AppState> {
+export class App extends Component<{}, AppState> {
   state = {
     guess: null,
     currentIndex: 0
@@ -53,11 +53,16 @@ export class App extends Component<null, AppState> {
 
     return (
       <div>
-        <h1>Imprint</h1>
+        <h1 className="max-w-xl mx-auto font-sans text-2xl mb-4 mt-4 px-8 text-blue">Imprint</h1>
 
-        <Card {...item.zh} />
-        {!isSubmitted && <QuizInput submit={answer => this.setGuess(answer)} />}
-        {isSubmitted && <Feedback item={item} answer={this.state.guess!} />}
+        <div className="max-w-xl mx-auto bg-white p-8 my-4 shadow-md rounded-lg">
+          <Card {...item.zh} />
+
+          <div className="border-t -mb-8 -ml-8 -mr-8 p-8 mt-8 h-32 flex items-center">
+            {!isSubmitted && <QuizInput submit={answer => this.setGuess(answer)} />}
+            {isSubmitted && <Feedback item={item} answer={this.state.guess!} />}
+          </div>
+        </div>
       </div>
     )
   }
