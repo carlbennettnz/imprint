@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('Quiz', () => {
-  beforeEach(() => cy.visit('/'))
+  beforeEach(() => cy.visit('/lesson-1'))
 
   it('shows the correct answer if wrong answer is entered', () => {
     cy.get('[data-test-quiz-input]').type('you')

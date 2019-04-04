@@ -10,7 +10,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "build": "rm -f dist/* && parcel build --experimental-scope-hoisting src/index.html",
-    "serve": "cd dist && serve",
+    "serve": "cd dist && serve --single",
     "deploy": "surge ./dist imprint.carl.nz"
   },
   "devDependencies": {
@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "preact": "^8.4.2",
+    "preact-router": "^2.6.1",
     "tailwindcss": "^0.7.4"
   }
 }
