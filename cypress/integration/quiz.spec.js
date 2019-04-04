@@ -15,6 +15,12 @@ context('Quiz', () => {
     cy.get('[data-test-quiz-input]').should('not.exist')
   })
 
+  it('says if the correct answer is entered', () => {
+    cy.get('[data-test-quiz-input]').type('I')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]').should('have.text', 'Correct!')
+  })
+
   it('shows a new item after pressing return on feedback screen', () => {
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
