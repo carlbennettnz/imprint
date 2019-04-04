@@ -43,7 +43,7 @@ export class Quiz extends Component<QuizProps, QuizState> {
 
     this.setState({
       guess: null,
-      currentIndex: (this.state.currentIndex + 1) % lesson.length
+      currentIndex: (this.state.currentIndex + 1) % this.lesson.items.length
     })
   }
 

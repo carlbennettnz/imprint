@@ -47,4 +47,15 @@ context('Quiz', () => {
     cy.get('body').type('{enter}')
     cy.focused().should('have.attr', 'data-test-quiz-input')
   })
+
+  it('loops', () => {
+    cy.get('[data-test-quiz-input]').type('I')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-quiz-input]').type('you')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-pinyin]').should('have.text', 'wǒ')
+    cy.get('[data-test-characters]').should('have.text', '我')
+  })
 })
