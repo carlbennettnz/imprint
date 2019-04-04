@@ -24,6 +24,9 @@ context('Quiz', () => {
   })
 
   it('focuses the input automatically', () => {
+    cy.get('[data-test-quiz-input]').type('you')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
     cy.focused().should('have.attr', 'data-test-quiz-input')
   })
 })
