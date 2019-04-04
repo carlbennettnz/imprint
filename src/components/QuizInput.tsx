@@ -5,8 +5,14 @@ type QuizInputProps = {
 }
 
 export class QuizInput extends Component<QuizInputProps> {
+  input: HTMLInputElement | null = null
+
   state = {
     answer: ''
+  }
+
+  componentDidMount() {
+    if (this.input) this.input.focus()
   }
 
   updateAnswer(answer: string) {
@@ -23,6 +29,7 @@ export class QuizInput extends Component<QuizInputProps> {
       <form data-test-quiz-form onSubmit={(event: Event) => this.handleSubmit(event)}>
         <input
           data-test-quiz-input
+          ref={input => { this.input = input }}
           value={this.state.answer}
           onInput={event => this.updateAnswer((event.target as HTMLInputElement).value)}
         />
