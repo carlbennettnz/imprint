@@ -28,13 +28,15 @@ export class App extends Component<null, AppState> {
   }
 
   render() {
+    const isSubmitted = this.state.guessStatus
+
     return (
       <div>
         <h1>Imprint</h1>
 
-        {this.state.guessStatus === GuessStatus.wrong && <Feedback item={LESSON[0]} />}
+        {isSubmitted && <Feedback item={LESSON[0]} />}
         <Card {...LESSON[0].zh} />
-        <QuizInput submit={answer => this.checkAnswer(LESSON[0], answer)} />
+        {!isSubmitted && <QuizInput submit={answer => this.checkAnswer(LESSON[0], answer)} />}
       </div>
     )
   }
