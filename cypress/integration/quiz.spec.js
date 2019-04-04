@@ -21,6 +21,18 @@ context('Quiz', () => {
     cy.get('[data-test-feedback]').should('have.text', 'Correct!')
   })
 
+  it('does not care about the case of the answer', () => {
+    cy.get('[data-test-quiz-input]').type('i')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]').should('have.text', 'Correct!')
+  })
+
+  it('does not care about whitespace around the answer', () => {
+    cy.get('[data-test-quiz-input]').type(' I ')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]').should('have.text', 'Correct!')
+  })
+
   it('shows a new item after pressing return on feedback screen', () => {
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()

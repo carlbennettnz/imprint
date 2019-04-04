@@ -8,5 +8,9 @@ type FeedbackProps = {
 }
 
 export const Feedback = ({ item, answer }: FeedbackProps) => (
-  <div data-test-feedback>{item.en.includes(answer) ? 'Correct!' : item.en.join(', ')}</div>
+  <div data-test-feedback>
+    {item.en.map(a => a.toLowerCase()).includes(answer.toLowerCase().trim())
+      ? 'Correct!'
+      : item.en.join(', ')}
+  </div>
 )
