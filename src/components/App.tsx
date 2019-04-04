@@ -53,12 +53,20 @@ export class App extends Component<{}, AppState> {
 
     return (
       <div>
-        <h1 className="max-w-xl mx-auto font-sans text-2xl mb-4 mt-4 px-8 text-blue">Imprint</h1>
+        <header className="bg-white border-b border-grey-light py-4 mb-8">
+          <h1 className="max-w-md mx-auto font-sans text-2xl my-0 px-8 text-blue">Imprint</h1>
+        </header>
 
-        <div className="max-w-xl mx-auto bg-white p-8 my-4 shadow-md rounded-lg">
+        <header className="max-w-md mx-auto px-8 py-4 flex">
+          <a className="text-grey-dark mr-auto">← Lessons</a>
+          <h2 className="text-base text-grey-darker">Lesson 1</h2>
+          <div className="text-grey ml-auto opacity-0">← Lessons</div> {/* just for alignment */}
+        </header>
+
+        <div className="max-w-md mx-auto bg-white p-8 mb-8 border border-grey-light rounded-lg overflow-hidden">
           <Card {...item.zh} />
 
-          <div className="border-t -mb-8 -ml-8 -mr-8 p-8 mt-8 h-32 flex items-center">
+          <div className="border-t border-grey-light -mb-8 -ml-8 -mr-8 p-8 mt-8 h-32 flex items-center">
             {!isSubmitted && <QuizInput submit={answer => this.setGuess(answer)} />}
             {isSubmitted && <Feedback item={item} answer={this.state.guess!} />}
           </div>
