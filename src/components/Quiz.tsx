@@ -31,6 +31,21 @@ export class Quiz extends Component<QuizProps, QuizState> {
     return LESSONS.find(({ slug }) => slug === this.props.lesson)!
   }
 
+  get nextQuestionIndex(): number {
+    const statuses = this.itemStatuses
+    let candidate = this.state.currentIndex
+
+    if (statuses.every(s => s === true)) {
+      return candidate
+    }
+
+    do {
+      candidate = (candidate + 1) % statuses.length
+    } while (statuses[candidate] === true)
+
+    return candidate
+  }
+
   get isComplete(): boolean {
     return this.lesson.items.every(item => this.itemIsComplete(item))
   }
@@ -81,7 +96,7 @@ export class Quiz extends Component<QuizProps, QuizState> {
     } else {
       this.setState({
         correct: null,
-        currentIndex: (this.state.currentIndex + 1) % this.lesson.items.length
+        currentIndex: this.nextQuestionIndex
       })
     }
   }
