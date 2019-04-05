@@ -49,13 +49,61 @@ context('Quiz', () => {
   })
 
   it('loops', () => {
+    cy.get('[data-test-quiz-input]').type('wrong')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-quiz-input]').type('wrong')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-pinyin]').should('have.text', 'wǒ')
+    cy.get('[data-test-characters]').should('have.text', '我')
+  })
+
+  it('completes if you get everything correct', () => {
+    cy.get('[data-test-quiz-input]').type('I')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-quiz-input]').type('you')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]').should('have.text', 'Lesson complete!')
+    cy.get('[data-test-instruction]').should(
+      'have.text',
+      'Press enter to return to the lesson list'
+    )
+  })
+
+  it('makes you answer correctly twice if you mess up', () => {
+    cy.get('[data-test-quiz-input]').type('wrong')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-quiz-input]').type('wrong')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
     cy.get('body').type('{enter}')
-    cy.get('[data-test-pinyin]').should('have.text', 'wǒ')
-    cy.get('[data-test-characters]').should('have.text', '我')
+    cy.get('[data-test-quiz-input]').type('I')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-quiz-input]').type('you')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]').should('have.text', 'Lesson complete!')
+    cy.get('[data-test-instruction]').should(
+      'have.text',
+      'Press enter to return to the lesson list'
+    )
+  })
+
+  it('takes you back to the list after completing and pressing enter', () => {
+    cy.get('[data-test-quiz-input]').type('I')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-quiz-input]').type('you')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.location('pathname').should('equal', '/')
   })
 })

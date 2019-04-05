@@ -1,10 +1,11 @@
 import { h, Component } from 'preact'
-import { Link } from 'preact-router'
+import { Link, route } from 'preact-router'
 
 import { Card } from './Card'
 import { QuizInput } from './QuizInput'
 import { Feedback } from './Feedback'
 import { LESSONS } from '../data/lessons'
+import { QuizItem } from '../types/QuizItem'
 
 const ENTER_KEYCODE = 13
 
@@ -13,18 +14,28 @@ type QuizProps = {
 }
 
 type QuizState = {
-  guess: string | null
+  correct: boolean | null
   currentIndex: number
+  progress: Map<QuizItem, boolean[]>
 }
 
 export class Quiz extends Component<QuizProps, QuizState> {
   state = {
-    guess: null,
-    currentIndex: 0
+    correct: null,
+    currentIndex: 0,
+    progress: new Map<QuizItem, boolean[]>()
   }
 
   get lesson() {
     return LESSONS.find(({ slug }) => slug === this.props.lesson)!
+  }
+
+  get isComplete() {
+    return this.lesson.items.reduce((complete, item) => {
+      const history = this.state.progress.get(item)
+      console.log(history)
+      return complete && !!history && !history.slice(-2).includes(false)
+    }, true)
   }
 
   componentWillMount() {
@@ -37,22 +48,32 @@ export class Quiz extends Component<QuizProps, QuizState> {
 
   handleKeypress(event: KeyboardEvent) {
     if (event.keyCode !== ENTER_KEYCODE) return
-    if (this.state.guess === null) return
+    if (this.state.correct === null) return
 
     event.preventDefault()
 
-    this.setState({
-      guess: null,
-      currentIndex: (this.state.currentIndex + 1) % this.lesson.items.length
-    })
+    if (this.isComplete) {
+      route('/')
+    } else {
+      this.setState({
+        correct: null,
+        currentIndex: (this.state.currentIndex + 1) % this.lesson.items.length
+      })
+    }
   }
 
-  setGuess(answer: string) {
-    this.setState({ guess: answer })
+  makeGuess(answer: string) {
+    const item = this.lesson.items[this.state.currentIndex]
+    const correct = item.en.map(a => a.toLowerCase()).includes(answer.toLowerCase().trim())
+    const progress = new Map(this.state.progress)
+
+    progress.set(item, [...(progress.get(item) || []), correct])
+
+    this.setState({ correct, progress })
   }
 
   render() {
-    const isSubmitted = this.state.guess !== null
+    const isSubmitted = this.state.correct !== null
     const item = this.lesson.items[this.state.currentIndex]
 
     return (
@@ -72,8 +93,10 @@ export class Quiz extends Component<QuizProps, QuizState> {
           <Card {...item.zh} />
 
           <div className="border-t border-grey-light -mb-8 -ml-8 -mr-8 p-8 mt-8 h-32 flex items-center">
-            {!isSubmitted && <QuizInput submit={answer => this.setGuess(answer)} />}
-            {isSubmitted && <Feedback item={item} answer={this.state.guess!} />}
+            {!isSubmitted && <QuizInput submit={answer => this.makeGuess(answer)} />}
+            {isSubmitted && (
+              <Feedback item={item} correct={this.state.correct!} complete={this.isComplete} />
+            )}
           </div>
         </div>
       </div>
