@@ -97,6 +97,16 @@ context('Quiz', () => {
     )
   })
 
+  it('does not show you items again after you complete them', () => {
+    cy.get('[data-test-quiz-input]').type('I')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-quiz-input]').type('wrong')
+    cy.get('[data-test-quiz-form]').submit()
+    cy.get('body').type('{enter}')
+    cy.get('[data-test-pinyin]').should('have.text', 'nǐ')
+  })
+
   it('takes you back to the list after completing and pressing enter', () => {
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
