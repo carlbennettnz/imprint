@@ -21,6 +21,8 @@ type QuizState = {
 }
 
 export class Quiz extends Component<QuizProps, QuizState> {
+  listener = this.handleKeypress.bind(this)
+
   state = {
     correct: null,
     currentIndex: 0,
@@ -71,7 +73,7 @@ export class Quiz extends Component<QuizProps, QuizState> {
   }
 
   componentWillMount() {
-    document.addEventListener('keypress', this.handleKeypress.bind(this))
+    document.addEventListener('keypress', this.listener)
     this.setState({
       correct: null,
       currentIndex: 0,
@@ -80,14 +82,12 @@ export class Quiz extends Component<QuizProps, QuizState> {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeypress.bind(this))
+    document.removeEventListener('keypress', this.listener)
   }
 
   handleKeypress(event: KeyboardEvent) {
     if (event.keyCode !== ENTER_KEYCODE) return
     if (this.state.correct === null) return
-
-    console.log(this.state.correct, this.isComplete)
 
     event.preventDefault()
 
