@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('Quiz', () => {
-  beforeEach(() => cy.visit('/lesson-1'))
+  beforeEach(() => cy.visit('/lessons/1/quiz'))
 
   it('shows the correct answer if wrong answer is entered', () => {
     cy.get('[data-test-quiz-input]').type('you')
@@ -114,7 +114,7 @@ context('Quiz', () => {
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
     cy.get('body').type('{enter}')
-    cy.location('pathname').should('equal', '/')
+    cy.location('pathname').should('equal', '/lessons/1')
   })
 
   it('lets you start again after completing', () => {

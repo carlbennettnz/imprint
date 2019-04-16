@@ -92,7 +92,7 @@ export class Quiz extends Component<QuizProps, QuizState> {
     event.preventDefault()
 
     if (this.isComplete) {
-      route('/')
+      route(`/lessons/${this.props.lesson || ''}`)
     } else {
       this.setState({
         correct: null,

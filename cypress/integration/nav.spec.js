@@ -1,20 +1,19 @@
 /// <reference types="Cypress" />
 
 context('Nav', () => {
-  it('links from lesson list to lesson', () => {
+  it('redircts to /lessons/1 from root', () => {
     cy.visit('/')
-    cy.get(`a[href='/lesson-1']`).click()
-    cy.location('pathname').should('equal', '/lesson-1')
+    cy.location('pathname').should('equal', '/lessons/1')
   })
 
-  it('links from lesson to lesson list', () => {
-    cy.visit('/lesson-1')
-    cy.get(`a[href='/']`).click()
-    cy.location('pathname').should('equal', '/')
+  it('redircts to /lessons/1 from /lessons', () => {
+    cy.visit('/lessons')
+    cy.location('pathname').should('equal', '/lessons/1')
   })
 
-  it('loads the correct quiz', () => {
-    cy.visit('/lesson-2')
-    cy.get('h2').should('have.text', 'Lesson 2')
+  it('links from one lesson all others', () => {
+    cy.visit('/lessons/1')
+    cy.get(`a[href='/lessons/2/quiz']`).click()
+    cy.location('pathname').should('equal', '/lessons/2/quiz')
   })
 })

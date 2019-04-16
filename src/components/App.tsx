@@ -3,6 +3,7 @@ import Router from 'preact-router'
 
 import { Quiz } from './Quiz'
 import { Lessons } from './Lessons'
+import { Redirect } from './Redirect'
 
 export class App extends Component {
   render() {
@@ -13,8 +14,9 @@ export class App extends Component {
         </header>
 
         <Router>
-          <Lessons path="/" />
-          <Quiz path="/:lesson" />
+          <Lessons path="/lessons/:lesson" />
+          <Quiz path="/lessons/:lesson/quiz" />
+          <Redirect default to="/lessons/1" />
         </Router>
       </div>
     )

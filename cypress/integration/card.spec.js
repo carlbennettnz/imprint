@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 context('Card', () => {
-  before(() => cy.visit('/lesson-1'))
+  before(() => cy.visit('/lessons/1/quiz'))
 
   it('it shows the pinyin', () => {
     cy.get('[data-test-pinyin]').should('have.text', 'wǒ')

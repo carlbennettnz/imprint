@@ -11,7 +11,7 @@ export class Lessons extends Component {
           <li className="mb-4">
             <Link
               className="text-grey-darkest no-underline bg-white border border-grey-light rounded-lg p-4 flex"
-              href={`/${slug}`}
+              href={`/lessons/${slug}/quiz`}
             >
               <span>{titleLong}</span>
               <span className="ml-auto">→</span>
