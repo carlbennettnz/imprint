@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "rm -f dist/* && parcel build --experimental-scope-hoisting src/index.html",
+    "build": "rm -f dist/* && parcel build src/index.html",
     "serve": "cd dist && serve --single",
     "deploy": "surge ./dist imprint.carl.nz"
   },
