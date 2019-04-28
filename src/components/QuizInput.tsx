@@ -29,15 +29,21 @@ export class QuizInput extends Component<QuizInputProps> {
 
   render() {
     return (
-      <form className="w-full px-16" data-test-quiz-form onSubmit={(event: Event) => this.handleSubmit(event)}>
+      <form
+        className="w-full px-16"
+        data-test-quiz-form
+        onSubmit={(event: Event) => this.handleSubmit(event)}
+      >
         <input
           className="w-full text-2xl text-center py-2 border-b-2 outline-none focus:border-blue"
           data-test-quiz-input
-          ref={input => { this.input = input }}
+          ref={input => {
+            this.input = input
+          }}
           value={this.state.answer}
           onInput={event => this.updateAnswer((event.target as HTMLInputElement).value)}
         />
       </form>
     )
   }
-)
+}

@@ -124,7 +124,7 @@ context('Quiz', () => {
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
     cy.get('body').type('{enter}')
-    cy.get('li:first-of-type > a').click()
+    cy.get(`a[href='/lessons/1/quiz']`).click()
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
     cy.get('body').type('{enter}')

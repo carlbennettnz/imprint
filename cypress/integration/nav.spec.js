@@ -13,7 +13,7 @@ context('Nav', () => {
 
   it('links from one lesson all others', () => {
     cy.visit('/lessons/1')
-    cy.get(`a[href='/lessons/2/quiz']`).click()
-    cy.location('pathname').should('equal', '/lessons/2/quiz')
+    cy.get(`a[href='/lessons/2']`).click()
+    cy.location('pathname').should('equal', '/lessons/2')
   })
 })
