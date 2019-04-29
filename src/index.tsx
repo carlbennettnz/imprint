@@ -1,7 +1,8 @@
 import { h, render } from 'preact'
 
+import db from './data/db'
 import { App } from './components/App'
 
 const el = document.querySelector('#app')!
 
-render(<App />, el)
+db.init().then(() => render(<App />, el))
