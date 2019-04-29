@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context.only('Lesson', () => {
+context('Lesson', () => {
   it('has the correct title', () => {
     cy.visit('/lessons/1')
     cy.get('h2').should('have.text', 'Lesson 1: How are you?')
