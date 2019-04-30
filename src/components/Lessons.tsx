@@ -5,9 +5,12 @@ import { LessonsList } from './LessonList'
 import { Lesson } from './Lesson'
 import db from '../data/db'
 
-type LessonsProps = { lesson?: string }
+type LessonsProps = {
+  lesson?: string
+  edit: boolean
+}
 
-export const Lessons = ({ lesson }: LessonsProps) => {
+export const Lessons = ({ lesson, edit }: LessonsProps) => {
   const [lessons, setLessons] = useState<any>(null)
   const [items, setItems] = useState<any>(null)
 
@@ -29,7 +32,7 @@ export const Lessons = ({ lesson }: LessonsProps) => {
   return (
     <div className="flex max-w-lg mx-auto mt-4">
       <LessonsList lessons={lessons} />
-      <Lesson lesson={currentLesson} />
+      <Lesson lesson={currentLesson} edit={edit} />
     </div>
   )
 }

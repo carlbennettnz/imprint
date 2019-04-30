@@ -14,7 +14,8 @@ export class App extends Component {
         </header> */}
 
         <Router>
-          <Lessons path="/lessons/:lesson" />
+          <Lessons path="/lessons/:lesson" edit={false} />
+          <Lessons path="/lessons/:lesson/edit" edit={true} />
           <Quiz path="/lessons/:lesson/quiz" />
           <Redirect default to="/lessons/1" />
         </Router>
