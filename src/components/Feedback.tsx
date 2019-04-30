@@ -1,9 +1,7 @@
 import { h } from 'preact'
 
-import { QuizItem } from '../types/QuizItem'
-
 type FeedbackProps = {
-  item: QuizItem
+  item: any
   correct: boolean
   complete: boolean
 }
@@ -11,7 +9,7 @@ type FeedbackProps = {
 export const Feedback = ({ item, correct, complete }: FeedbackProps) => (
   <div className="mx-auto">
     <div className="text-center text-xl" data-test-feedback>
-      {complete ? 'Lesson complete!' : correct ? 'Correct!' : item.en.join(', ')}
+      {complete ? 'Lesson complete!' : correct ? 'Correct!' : item.meaning.join(', ')}
     </div>
 
     <div className="text-grey mt-2" data-test-instruction>

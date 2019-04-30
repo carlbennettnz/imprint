@@ -1,147 +1,142 @@
-import { h, Component } from 'preact'
+import { h } from 'preact'
 import { Link, route } from 'preact-router'
+import { useState, useEffect } from 'preact/hooks'
 
 import { Card } from './Card'
 import { QuizInput } from './QuizInput'
 import { Feedback } from './Feedback'
-import { LESSONS } from '../data/lessons'
 import { QuizItem } from '../types/QuizItem'
 import { LessonStatus } from './LessonStatus'
+import db from '../data/db'
+import { QuizHeader } from './QuizHeader'
 
 const ENTER_KEYCODE = 13
 
 type QuizProps = {
-  lesson?: string
+  lesson: string
 }
 
-type QuizState = {
-  correct: boolean | null
-  currentIndex: number
-  progress: Map<QuizItem, boolean[]>
-}
+export const Quiz = (props: QuizProps) => {
+  const lesson = useLesson(+props.lesson)
+  const [getItemHistory, addItemGuess] = useItemHistory()
+  const [correct, setCorrect] = useState(null)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
-export class Quiz extends Component<QuizProps, QuizState> {
-  listener = this.handleKeypress.bind(this)
+  useKeyBinding(ENTER_KEYCODE, (event: KeyboardEvent) => {
+    if (correct === null || lesson === null) return
 
-  state = {
-    correct: null,
-    currentIndex: 0,
-    progress: new Map<QuizItem, boolean[]>()
+    event.preventDefault()
+
+    if (isComplete) {
+      route(`/lessons/${props.lesson}`)
+    } else {
+      setCorrect(null)
+      setCurrentIndex(getNextQuestionIndex())
+    }
+  })
+
+  const itemIsComplete = (item: QuizItem): boolean => {
+    const history = getItemHistory(item)
+    return history.length > 0 && !history.includes(false)
   }
 
-  get lesson() {
-    return LESSONS.find(({ slug }) => slug === this.props.lesson)!
-  }
+  if (!lesson) return null
 
-  get nextQuestionIndex(): number {
-    const statuses = this.itemStatuses
-    let candidate = this.state.currentIndex
+  const itemStatuses = lesson.items.map((item: any) => {
+    const history = getItemHistory(item)
+    if (history.length === 0) return null
+    if (!history.includes(false)) return true
+    if (history[history.length - 1] === true) return null
+    return false
+  })
 
-    if (statuses.every(s => s === true)) {
+  const getNextQuestionIndex = (): number => {
+    let candidate = currentIndex
+
+    if (itemStatuses.every((s: boolean) => s === true)) {
       return candidate
     }
 
     do {
-      candidate = (candidate + 1) % statuses.length
-    } while (statuses[candidate] === true)
+      candidate = (candidate + 1) % itemStatuses.length
+    } while (itemStatuses[candidate] === true)
 
     return candidate
   }
 
-  get isComplete(): boolean {
-    return this.lesson.items.every(item => this.itemIsComplete(item))
+  const makeGuess = (answer: string) => {
+    const item = lesson.items[currentIndex]
+    const correct = item.meaning
+      .map((a: string) => a.toLowerCase())
+      .includes(answer.toLowerCase().trim())
+
+    addItemGuess(item, correct)
+    setCorrect(correct)
   }
 
-  get itemStatuses(): (boolean | null)[] {
-    return this.lesson.items.map(item => {
-      const history = this.itemHistory(item)
-      if (history.length === 0) return null
-      if (!history.includes(false)) return true
-      if (history[history.length - 1] === true) return null
-      return false
-    })
-  }
+  const isComplete = lesson.items.every(itemIsComplete)
+  const isSubmitted = correct !== null
+  const item = lesson.items[currentIndex]
 
-  itemIsComplete(item: QuizItem): boolean {
-    const history = this.itemHistory(item)
-    return history.length > 0 && !history.includes(false)
-  }
+  return (
+    <div>
+      <QuizHeader lesson={lesson} />
 
-  itemHistory(item: QuizItem): boolean[] {
-    const history = this.state.progress.get(item)
-    return history ? history.slice(-2) : []
-  }
+      <div className="max-w-md mx-auto bg-white p-8 border border-grey-light rounded-lg overflow-hidden">
+        <Card characters={item.characters} pinyin={item.pinyin} />
 
-  componentWillMount() {
-    document.addEventListener('keypress', this.listener)
-    this.setState({
-      correct: null,
-      currentIndex: 0,
-      progress: new Map()
-    })
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keypress', this.listener)
-  }
-
-  handleKeypress(event: KeyboardEvent) {
-    if (event.keyCode !== ENTER_KEYCODE) return
-    if (this.state.correct === null) return
-
-    event.preventDefault()
-
-    if (this.isComplete) {
-      route(`/lessons/${this.props.lesson || ''}`)
-    } else {
-      this.setState({
-        correct: null,
-        currentIndex: this.nextQuestionIndex
-      })
-    }
-  }
-
-  makeGuess(answer: string) {
-    const item = this.lesson.items[this.state.currentIndex]
-    const correct = item.en.map(a => a.toLowerCase()).includes(answer.toLowerCase().trim())
-    const progress = new Map(this.state.progress)
-
-    progress.set(item, [...(progress.get(item) || []), correct])
-
-    this.setState({ correct, progress })
-  }
-
-  render() {
-    const isSubmitted = this.state.correct !== null
-    const item = this.lesson.items[this.state.currentIndex]
-
-    return (
-      <div>
-        <header className="max-w-md mx-auto px-8 py-4 flex">
-          <Link
-            href="/"
-            className="text-grey-dark mr-auto hover:text-blue no-underline cursor-pointer"
-          >
-            ← Lessons
-          </Link>
-          <h2 className="text-base text-grey-darker">{this.lesson.titleShort}</h2>
-        </header>
-
-        <div className="max-w-md mx-auto bg-white p-8 border border-grey-light rounded-lg overflow-hidden">
-          <Card {...item.zh} />
-
-          <div className="border-t border-grey-light -mb-8 -ml-8 -mr-8 p-8 mt-8 h-32 flex items-center">
-            {!isSubmitted && <QuizInput submit={answer => this.makeGuess(answer)} />}
-            {isSubmitted && (
-              <Feedback item={item} correct={this.state.correct!} complete={this.isComplete} />
-            )}
-          </div>
-        </div>
-
-        <div className="max-w-md mx-auto px-8 py-4">
-          <LessonStatus itemStatuses={this.itemStatuses} />
+        <div className="border-t border-grey-light -mb-8 -ml-8 -mr-8 p-8 mt-8 h-32 flex items-center">
+          {!isSubmitted && <QuizInput submit={answer => makeGuess(answer)} />}
+          {isSubmitted && <Feedback item={item} correct={correct!} complete={isComplete} />}
         </div>
       </div>
-    )
+
+      <div className="max-w-md mx-auto px-8 py-4">
+        <LessonStatus itemStatuses={itemStatuses} />
+      </div>
+    </div>
+  )
+}
+
+const useLesson = (lessonNumber: number) => {
+  const [lesson, setLesson] = useState<any>(null)
+
+  useEffect(() => {
+    db.getLesson(lessonNumber).then(setLesson)
+  }, [lessonNumber])
+
+  return lesson
+}
+
+const useItemHistory = (): [(item: any) => boolean[], (item: any, correct: boolean) => void] => {
+  const [history, setHistory] = useState(new Map<QuizItem, boolean[]>())
+
+  const getItemHistory = (item: QuizItem): boolean[] => {
+    const itemHistory = history.get(item)
+    return itemHistory ? itemHistory.slice(-2) : []
   }
+
+  const addItemGuess = (item: any, correct: boolean): void => {
+    const newHistory = new Map(history)
+    newHistory.set(item, [...(history.get(item) || []), correct])
+    setHistory(newHistory)
+  }
+
+  return [getItemHistory, addItemGuess]
+}
+
+const useKeyBinding = (keyCode: number, handler: (event: KeyboardEvent) => unknown) => {
+  useEffect(() => {
+    const filter = (event: KeyboardEvent) => {
+      if (event.which === keyCode) {
+        handler(event)
+      }
+    }
+
+    document.addEventListener('keypress', filter)
+
+    return () => {
+      document.removeEventListener('keypress', filter)
+    }
+  })
 }

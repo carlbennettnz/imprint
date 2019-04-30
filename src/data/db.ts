@@ -58,6 +58,14 @@ export default {
     return this.db.getAll('lessons')
   },
 
+  async getLesson(id: number) {
+    const lesson = await this.db.get('lessons', id)
+
+    lesson.items = await this.getLessonContent(lesson)
+
+    return lesson
+  },
+
   async getLessonContent(lesson: any) {
     return await Promise.all(lesson.items.map((id: number) => this.db.get('items', id)))
   }
