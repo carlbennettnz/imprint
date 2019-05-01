@@ -12,6 +12,6 @@ export const Lesson = ({ lesson, edit }: { lesson: any; edit: boolean }) => (
       <LessonControls lesson={lesson} edit={edit} save={() => {}} />
     </header>
 
-    <LessonContents lesson={lesson} />
+    <LessonContents items={lesson.items} isEditable={edit} updateItem={() => {}} />
   </div>
 )
