@@ -1,20 +1,18 @@
 export const LESSONS = [
   {
-    titleShort: 'Lesson 1',
-    titleLong: 'Lesson 1: How are you?',
-    slug: '1',
+    number: 1,
+    title: 'How are you?',
     items: [
-      { zh: { pinyin: 'wǒ', characters: '我' }, en: ['I', 'me', 'myself'] },
-      { zh: { pinyin: 'nǐ', characters: '你' }, en: ['you'] }
+      { id: 1, pinyin: 'wǒ', characters: '我', en: ['I', 'me', 'myself'] },
+      { id: 2, pinyin: 'nǐ', characters: '你', en: ['you'] }
     ]
   },
   {
-    titleShort: 'Lesson 2',
-    titleLong: 'Lesson 2: What is your job?',
-    slug: '2',
+    number: 2,
+    title: 'What is your job?',
     items: [
-      { zh: { pinyin: 'zhíyè', characters: '职业' }, en: ['profession'] },
-      { zh: { pinyin: 'gōngzuò', characters: '工作' }, en: ['job'] }
+      { id: 3, pinyin: 'zhíyè', characters: '职业', en: ['profession'] },
+      { id: 4, pinyin: 'gōngzuò', characters: '工作', en: ['job'] }
     ]
   }
 ]

@@ -1,7 +1,8 @@
-import { h } from 'preact'
+import React from 'react'
+import { QuizItem } from '../types/QuizItem'
 
 type LessonContentProps = {
-  items: any[]
+  items: QuizItem[]
   isEditable: boolean
   updateItem: (event: Event) => void
 }
@@ -11,14 +12,25 @@ export const LessonContents = ({ items, isEditable, updateItem }: LessonContentP
     <div className="bg-white border rounded-lg mt-4">
       <table className="p-4 w-full">
         <tbody>
-          {items.map((item: any, i: number) => (
-            <LessonItemRow
-              item={item}
-              update={(event: Event) => updateItem(event)}
-              editable={isEditable}
-              isLast={i < items.length - 1}
-            />
-          ))}
+          {items.map((item: any, i: number) => {
+            const update = (event: Event) => {
+              const target = event.target as HTMLInputElement
+              const key = target.name.match(/\]\.(.+)/)![1]
+              let value: string | string[] = target.value
+              if (key === 'en') value = value.split(', ')
+              updateItem({ ...item, [key]: value })
+            }
+
+            return (
+              <LessonItemRow
+                key={i}
+                item={item}
+                update={update}
+                editable={isEditable}
+                isLast={i < items.length - 1}
+              />
+            )
+          })}
         </tbody>
       </table>
     </div>
@@ -43,7 +55,7 @@ const LessonItemRow = ({ item, update, editable, isLast }: any) => {
           value={item.characters}
           disabled={!editable}
           className={inputStyles}
-          onInput={update}
+          onChange={update}
         />
       </td>
 
@@ -54,18 +66,18 @@ const LessonItemRow = ({ item, update, editable, isLast }: any) => {
           value={item.pinyin}
           disabled={!editable}
           className={inputStyles}
-          onInput={update}
+          onChange={update}
         />
       </td>
 
       <td className={`${cellStyles} pr-1`}>
         <input
-          name={`items[${item.id}].meaning`}
-          placeholder="meaning"
-          value={item.meaning.join(', ')}
+          name={`items[${item.id}].en`}
+          placeholder="en"
+          value={item.en.join(', ')}
           disabled={!editable}
           className={inputStyles}
-          onInput={update}
+          onChange={update}
         />
       </td>
     </tr>

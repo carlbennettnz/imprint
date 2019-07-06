@@ -1,9 +1,8 @@
-import { h, Component } from 'preact'
-import Router from 'preact-router'
+import React, { Component } from 'react'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
 import { Quiz } from './Quiz'
 import { Lessons } from './Lessons'
-import { Redirect } from './Redirect'
 
 export class App extends Component {
   render() {
@@ -14,10 +13,21 @@ export class App extends Component {
         </header> */}
 
         <Router>
-          <Lessons path="/lessons/:lesson" edit={false} />
-          <Lessons path="/lessons/:lesson/edit" edit={true} />
-          <Quiz path="/lessons/:lesson/quiz" />
-          <Redirect default to="/lessons/1" />
+          {['/', '/lessons'].includes(location.pathname) && <Redirect to="/lessons/1" />}
+          <Route
+            render={({ match }) => <Lessons edit={false} lesson={match.params.lesson} />}
+            path="/lessons/:lesson"
+            exact
+          />
+          <Route
+            render={({ match }) => <Lessons edit={true} lesson={match.params.lesson} />}
+            path="/lessons/:lesson/edit"
+            exact
+          />
+          <Route
+            render={({ match }) => <Quiz edit={true} lesson={match.params.lesson} />}
+            path="/lessons/:lesson/quiz"
+          />
         </Router>
       </div>
     )

@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import React from 'react'
 
 type LessonStatusProps = {
   itemStatuses: (boolean | null)[]
@@ -6,8 +6,8 @@ type LessonStatusProps = {
 
 export const LessonStatus = ({ itemStatuses }: LessonStatusProps) => (
   <div className="flex items-center ml-auto justify-center">
-    {itemStatuses.map(status => (
-      <div className={`${getColor(status)} ml-1 w-2 h-2 rounded-full`} />
+    {itemStatuses.map((status, i) => (
+      <div key={i} className={`${getColor(status)} ml-1 w-2 h-2 rounded-full`} />
     ))}
   </div>
 )

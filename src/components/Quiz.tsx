@@ -1,22 +1,22 @@
-import { h } from 'preact'
-import { Link, route } from 'preact-router'
-import { useState, useEffect } from 'preact/hooks'
+import React, { useState, useEffect } from 'react'
+import { withRouter, Link } from 'react-router-dom'
+import { RouterProps } from 'react-router'
 
 import { Card } from './Card'
 import { QuizInput } from './QuizInput'
 import { Feedback } from './Feedback'
 import { QuizItem } from '../types/QuizItem'
 import { LessonStatus } from './LessonStatus'
-import db from '../data/db'
+import { getLesson } from '../data/db'
 import { QuizHeader } from './QuizHeader'
 
 const ENTER_KEYCODE = 13
 
 type QuizProps = {
   lesson: string
-}
+} & RouterProps
 
-export const Quiz = (props: QuizProps) => {
+export const Quiz = withRouter((props: QuizProps) => {
   const lesson = useLesson(+props.lesson)
   const [getItemHistory, addItemGuess] = useItemHistory()
   const [correct, setCorrect] = useState(null)
@@ -28,7 +28,7 @@ export const Quiz = (props: QuizProps) => {
     event.preventDefault()
 
     if (isComplete) {
-      route(`/lessons/${props.lesson}`)
+      props.history.push(`/lessons/${props.lesson}`)
     } else {
       setCorrect(null)
       setCurrentIndex(getNextQuestionIndex())
@@ -66,7 +66,7 @@ export const Quiz = (props: QuizProps) => {
 
   const makeGuess = (answer: string) => {
     const item = lesson.items[currentIndex]
-    const correct = item.meaning
+    const correct = item.en
       .map((a: string) => a.toLowerCase())
       .includes(answer.toLowerCase().trim())
 
@@ -96,13 +96,13 @@ export const Quiz = (props: QuizProps) => {
       </div>
     </div>
   )
-}
+})
 
 const useLesson = (lessonNumber: number) => {
   const [lesson, setLesson] = useState<any>(null)
 
   useEffect(() => {
-    db.getLesson(lessonNumber).then(setLesson)
+    setLesson(getLesson(lessonNumber))
   }, [lessonNumber])
 
   return lesson

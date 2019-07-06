@@ -1,6 +1,10 @@
 /// <reference types="Cypress" />
 
+import { resetDb } from '../support/helpers'
+
 context('Lesson', () => {
+  beforeEach(() => resetDb('basic'))
+
   it('has the correct title', () => {
     cy.visit('/lessons/1')
     cy.get('h2').should('have.text', 'Lesson 1: How are you?')
@@ -28,10 +32,25 @@ context('Lesson', () => {
     cy.get('table input')
       .eq(0)
       .type('他')
+
     cy.visit('/lessons/1')
     cy.get('table input')
       .eq(0)
       .should('have.value', '我')
+  })
+
+  it('does persist changes if save button is clicked', () => {
+    cy.visit('/lessons/1/edit')
+    cy.get('table input')
+      .eq(0)
+      .clear()
+      .type('他')
+    cy.contains('Save').click()
+
+    cy.visit('/lessons/1')
+    cy.get('table input')
+      .eq(0)
+      .should('have.value', '他')
   })
 })
 

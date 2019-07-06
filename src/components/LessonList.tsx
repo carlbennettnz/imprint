@@ -1,5 +1,5 @@
-import { h } from 'preact'
-import { Link } from 'preact-router'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 type LessonsListProps = { lessons: any[] }
 
@@ -13,10 +13,10 @@ export const LessonsList = ({ lessons }: LessonsListProps) => {
       <h1 className="max-w-lg mx-auto font-sans text-2xl my-0 px-4 mb-5 text-blue">Imprint</h1>
       <ol className="list-reset">
         {lessons.map(({ number }) => (
-          <li>
+          <li key={number}>
             <Link
               className={location.pathname.includes(number) ? activeItemStyle : itemStyle}
-              href={`/lessons/${number}`}
+              to={`/lessons/${number}`}
             >
               <span>Lesson {number}</span>
             </Link>

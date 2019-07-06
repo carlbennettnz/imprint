@@ -1,7 +1,6 @@
 export type QuizItem = {
-  zh: {
-    pinyin: string
-    characters: string
-  }
+  id: number
+  pinyin: string
+  characters: string
   en: string[]
 }

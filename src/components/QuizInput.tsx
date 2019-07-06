@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import React, { Component, FormEvent } from 'react'
 
 type QuizInputProps = {
   submit: (answer: string) => void
@@ -19,7 +19,7 @@ export class QuizInput extends Component<QuizInputProps> {
     this.setState({ answer })
   }
 
-  handleSubmit(event: Event) {
+  handleSubmit(event: FormEvent) {
     event.preventDefault()
 
     if (this.state.answer.trim().length > 0) {
@@ -32,7 +32,7 @@ export class QuizInput extends Component<QuizInputProps> {
       <form
         className="w-full px-16"
         data-test-quiz-form
-        onSubmit={(event: Event) => this.handleSubmit(event)}
+        onSubmit={(event: FormEvent) => this.handleSubmit(event)}
       >
         <input
           className="w-full text-2xl text-center py-2 border-b-2 outline-none focus:border-blue"
@@ -41,7 +41,7 @@ export class QuizInput extends Component<QuizInputProps> {
             this.input = input
           }}
           value={this.state.answer}
-          onInput={event => this.updateAnswer((event.target as HTMLInputElement).value)}
+          onChange={event => this.updateAnswer((event.target as HTMLInputElement).value)}
         />
       </form>
     )

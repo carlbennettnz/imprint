@@ -1,28 +1,26 @@
-import { h } from 'preact'
-import { useState, useEffect } from 'preact/hooks'
+import React, { useState, useEffect } from 'react'
 
 import { LessonsList } from './LessonList'
 import { Lesson } from './Lesson'
-import db from '../data/db'
+import { getLessons } from '../data/db'
+import { RouterProps, withRouter } from 'react-router'
 
 type LessonsProps = {
-  lesson?: string
+  lesson: string
   edit: boolean
+  history: RouterProps['history']
 }
 
-export const Lessons = ({ lesson, edit }: LessonsProps) => {
+// @ts-ignore
+export const Lessons = withRouter(({ lesson, edit, history }: LessonsProps) => {
   const [lessons, setLessons] = useState<any>(null)
   const [items, setItems] = useState<any>(null)
 
   useEffect(() => {
     if (!lesson) return
-
-    setItems(null)
-
-    db.getLessons().then(ls => {
-      setLessons(ls)
-      db.getLessonContent(getCurrentLesson(ls, lesson)).then(setItems)
-    })
+    const ls = getLessons()
+    setLessons(ls)
+    setItems(getCurrentLesson(ls, lesson).items)
   }, [lesson])
 
   if (!lesson || !lessons || !items) return null
@@ -32,10 +30,10 @@ export const Lessons = ({ lesson, edit }: LessonsProps) => {
   return (
     <div className="flex max-w-lg mx-auto mt-4">
       <LessonsList lessons={lessons} />
-      <Lesson lesson={currentLesson} edit={edit} />
+      <Lesson lesson={currentLesson} edit={edit} history={history} />
     </div>
   )
-}
+})
 
 const getCurrentLesson = (lessons: any, lessonNum: string) =>
   lessons.find((l: any) => l.number == lessonNum)!

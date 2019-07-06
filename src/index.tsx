@@ -1,8 +1,8 @@
-import { h, render } from 'preact'
+import React from 'react'
+import { render } from 'react-dom'
 
-import db from './data/db'
 import { App } from './components/App'
 
 const el = document.querySelector('#app')!
 
-db.init().then(() => render(<App />, el))
+render(<App />, el)

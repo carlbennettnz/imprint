@@ -1,84 +1,42 @@
-import { openDB, IDBPDatabase } from 'idb'
+import { guard, object, array, number, string, $DecoderType } from 'decoders'
+import { LESSONS } from './lessons'
 
-export default {
-  db: null as any,
+const lessonItem = object({
+  id: number,
+  pinyin: string,
+  characters: string,
+  en: array(string)
+})
 
-  async init() {
-    this.db = await openDB('imprint', 1, {
-      upgrade(db, oldVersion) {
-        switch (oldVersion) {
-          case 0:
-            upgradeToV1(db)
-        }
-      }
-    })
+const lesson = object({
+  number: number,
+  title: string,
+  items: array(lessonItem)
+})
 
-    this.db.put('lessons', {
-      number: 1,
-      title: 'How are you?',
-      items: [0, 1]
-    })
+type Lesson = $DecoderType<typeof lesson>
 
-    await this.db.put('lessons', {
-      number: 2,
-      title: 'What is your job?',
-      items: [2, 3]
-    })
+const lessonsGuard = guard(array(lesson))
 
-    await this.db.put('items', {
-      id: 0,
-      characters: '我',
-      pinyin: 'wǒ',
-      meaning: ['I', 'me', 'myself']
-    })
-
-    await this.db.put('items', {
-      id: 1,
-      characters: '你',
-      pinyin: 'nǐ',
-      meaning: ['you']
-    })
-
-    await this.db.put('items', {
-      id: 2,
-      characters: '职业',
-      pinyin: 'zhíyè',
-      meaning: ['profession']
-    })
-
-    await this.db.put('items', {
-      id: 2,
-      characters: '工作',
-      pinyin: 'gōngzuò',
-      meaning: ['job']
-    })
-  },
-
-  async getLessons() {
-    return this.db.getAll('lessons')
-  },
-
-  async getLesson(id: number) {
-    const lesson = await this.db.get('lessons', id)
-
-    lesson.items = await this.getLessonContent(lesson)
-
-    return lesson
-  },
-
-  async getLessonContent(lesson: any) {
-    return await Promise.all(lesson.items.map((id: number) => this.db.get('items', id)))
-  }
+export const getLessons = (): Lesson[] => {
+  try {
+    const lessons = lessonsGuard(JSON.parse(localStorage.lessons))
+    console.log(lessons)
+    if (lessons.length > 0) return lessons
+  } catch (err) {}
+  localStorage.lessons = JSON.stringify(LESSONS)
+  return LESSONS
 }
 
-const upgradeToV1 = (db: IDBPDatabase) => {
-  db.createObjectStore('lessons', {
-    keyPath: 'number',
-    autoIncrement: true
-  })
+export const getLesson = (num: number): Lesson | undefined => {
+  return getLessons().find(lesson => lesson.number === num)
+}
 
-  db.createObjectStore('items', {
-    keyPath: 'id',
-    autoIncrement: true
-  })
+export const saveLesson = (lesson: Lesson) => {
+  console.log('save')
+  localStorage.lessons = JSON.stringify(
+    getLessons().map(originalLesson =>
+      originalLesson.number === lesson.number ? lesson : originalLesson
+    )
+  )
 }
