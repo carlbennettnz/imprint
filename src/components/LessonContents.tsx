@@ -35,7 +35,9 @@ export const LessonContents = ({ items, isEditable, updateItem }: LessonContentP
 
             return (
               <LessonItemRow
-                key={item.id}
+                // This is actually more stable than item.id due to new
+                // items not being assigned ids until they're saved
+                key={i}
                 item={item}
                 update={update}
                 editable={isEditable}
@@ -49,7 +51,7 @@ export const LessonContents = ({ items, isEditable, updateItem }: LessonContentP
   )
 }
 
-const LessonItemRow = ({ item, update, editable, isLast }: any) => {
+const LessonItemRow = ({ key, item, update, editable, isLast }: any) => {
   const cellStyles = 'py-1 text-grey-darkest'
   let inputStyles =
     'w-full border-2 border-transparent focus:border-blue-light outline-none p-2 rounded text-black'
@@ -59,7 +61,7 @@ const LessonItemRow = ({ item, update, editable, isLast }: any) => {
   }
 
   return (
-    <tr key={item.id} className={isLast ? 'border-b' : ''}>
+    <tr key={key} className={isLast ? 'border-b' : ''}>
       <td className={`${cellStyles} text-xl w-16 pl-1`}>
         <input
           name={`items[${item.id}].characters`}
