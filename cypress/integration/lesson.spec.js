@@ -3,7 +3,7 @@
 import { resetDb } from '../support/helpers'
 
 context('Lesson', () => {
-  beforeEach(() => resetDb('basic'))
+  beforeEach(resetDb)
 
   it('has the correct title', () => {
     cy.visit('/lessons/1')
@@ -27,6 +27,11 @@ context('Lesson', () => {
     cy.get('table input').each(input => cy.wrap(input).should('not.be.disabled'))
   })
 
+  it('shows a blank row in edit mode', () => {
+    cy.visit('/lessons/1/edit')
+    cy.get('table tr').should('have.length', 3)
+  })
+
   it('does not persist changes if save button is not clicked', () => {
     cy.visit('/lessons/1/edit')
     cy.get('table input')
@@ -45,10 +50,32 @@ context('Lesson', () => {
       .eq(0)
       .clear()
       .type('他')
+
     cy.contains('Save').click()
 
     cy.visit('/lessons/1')
     cy.get('table input')
+      .eq(0)
+      .should('have.value', '他')
+  })
+
+  it('allows new items to be added', () => {
+    cy.visit('/lessons/1/edit')
+
+    cy.get('table tr:nth-child(3) input')
+      .eq(0)
+      .type('他')
+    cy.get('table tr:nth-child(3) input')
+      .eq(1)
+      .type('tā')
+    cy.get('table tr:nth-child(3) input')
+      .eq(2)
+      .type('him, he')
+
+    cy.contains('Save').click()
+
+    cy.visit('/lessons/1')
+    cy.get('table tr:nth-child(3) input')
       .eq(0)
       .should('have.value', '他')
   })

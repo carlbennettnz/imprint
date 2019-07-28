@@ -4,15 +4,27 @@ import { QuizItem } from '../types/QuizItem'
 type LessonContentProps = {
   items: QuizItem[]
   isEditable: boolean
-  updateItem: (event: Event) => void
+  updateItem: (item: QuizItem) => void
 }
 
 export const LessonContents = ({ items, isEditable, updateItem }: LessonContentProps) => {
+  if (isEditable) {
+    items = [
+      ...items,
+      {
+        id: 0,
+        pinyin: '',
+        characters: '',
+        en: []
+      }
+    ]
+  }
+
   return (
     <div className="bg-white border rounded-lg mt-4">
       <table className="p-4 w-full">
         <tbody>
-          {items.map((item: any, i: number) => {
+          {items.map((item: QuizItem, i: number) => {
             const update = (event: Event) => {
               const target = event.target as HTMLInputElement
               const key = target.name.match(/\]\.(.+)/)![1]
@@ -23,7 +35,7 @@ export const LessonContents = ({ items, isEditable, updateItem }: LessonContentP
 
             return (
               <LessonItemRow
-                key={i}
+                key={item.id}
                 item={item}
                 update={update}
                 editable={isEditable}

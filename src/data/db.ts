@@ -21,7 +21,6 @@ const lessonsGuard = guard(array(lesson))
 export const getLessons = (): Lesson[] => {
   try {
     const lessons = lessonsGuard(JSON.parse(localStorage.lessons))
-    console.log(lessons)
     if (lessons.length > 0) return lessons
   } catch (err) {}
   localStorage.lessons = JSON.stringify(LESSONS)
@@ -33,7 +32,6 @@ export const getLesson = (num: number): Lesson | undefined => {
 }
 
 export const saveLesson = (lesson: Lesson) => {
-  console.log('save')
   localStorage.lessons = JSON.stringify(
     getLessons().map(originalLesson =>
       originalLesson.number === lesson.number ? lesson : originalLesson

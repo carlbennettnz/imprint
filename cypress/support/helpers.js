@@ -1,3 +1,3 @@
-export const resetDb = async toState => {
+export const resetDb = () => {
   delete localStorage.lessons
 }

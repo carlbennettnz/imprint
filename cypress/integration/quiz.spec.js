@@ -1,6 +1,9 @@
 /// <reference types="Cypress" />
 
+import { resetDb } from '../support/helpers'
+
 context('Quiz', () => {
+  beforeEach(resetDb)
   beforeEach(() => cy.visit('/lessons/1/quiz'))
 
   it('shows the correct answer if wrong answer is entered', () => {
@@ -36,6 +39,7 @@ context('Quiz', () => {
   it('shows a new item after pressing return on feedback screen', () => {
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-pinyin]').should('have.text', 'nǐ')
     cy.get('[data-test-characters]').should('have.text', '你')
@@ -44,6 +48,7 @@ context('Quiz', () => {
   it('focuses the input automatically', () => {
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.focused().should('have.attr', 'data-test-quiz-input')
   })
@@ -51,9 +56,11 @@ context('Quiz', () => {
   it('loops', () => {
     cy.get('[data-test-quiz-input]').type('wrong')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('wrong')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-pinyin]').should('have.text', 'wǒ')
     cy.get('[data-test-characters]').should('have.text', '我')
@@ -62,6 +69,7 @@ context('Quiz', () => {
   it('completes if you get everything correct', () => {
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
@@ -75,18 +83,23 @@ context('Quiz', () => {
   it('makes you answer correctly twice if you mess up', () => {
     cy.get('[data-test-quiz-input]').type('wrong')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('wrong')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
@@ -100,9 +113,11 @@ context('Quiz', () => {
   it('does not show you items again after you complete them', () => {
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('wrong')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-pinyin]').should('have.text', 'nǐ')
   })
@@ -110,9 +125,11 @@ context('Quiz', () => {
   it('takes you back to the list after completing and pressing enter', () => {
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.location('pathname').should('equal', '/lessons/1')
   })
@@ -120,13 +137,16 @@ context('Quiz', () => {
   it('lets you start again after completing', () => {
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-quiz-input]').type('you')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get(`a[href='/lessons/1/quiz']`).click()
     cy.get('[data-test-quiz-input]').type('I')
     cy.get('[data-test-quiz-form]').submit()
+    cy.get('[data-test-feedback]') // forces cypress to wait before pressing enter
     cy.get('body').type('{enter}')
     cy.get('[data-test-pinyin]').should('have.text', 'nǐ')
     cy.get('[data-test-characters]').should('have.text', '你')
