@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { QuizController, QuestionStage } from '../../controllers/quiz'
-import { Lesson } from '../../types/Lesson'
+import { Lesson } from '../../types'
 import { useKeyBinding } from '../../utils/use-key-binding'
 
 import { QuizCard } from './QuizCard'

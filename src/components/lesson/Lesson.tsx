@@ -4,7 +4,7 @@ import { saveLesson } from '../../data/db'
 import { LessonControls } from './LessonControls'
 import { LessonContent } from './LessonContent'
 import { RouterProps } from 'react-router'
-import { QuizItem } from '../../types/Lesson'
+import { QuizItem } from '../../types'
 
 type LessonProps = {
   lesson: any
