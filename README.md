@@ -1,5 +1,9 @@
 # 🇨🇳 Imprint
 
+While trying to build up my Chinese vocabulary, I’ve been finding that my retention of words that don’t appear often is almost zero. This is my attempt to combat that, with a dictionary of words I _should_ know that regularly tests me to make sure I _do_ remember them with an exponential backoff as they're committed to memory.
+
+Work in progress.
+
 ## Learn Chinese with flash cards
 
 - [x] Learn from a looping, hardcoded dictionary of flash cards showing characters and pinyin

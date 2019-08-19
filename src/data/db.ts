@@ -1,22 +1,5 @@
-import { guard, object, array, number, string, $DecoderType } from 'decoders'
 import { LESSONS } from './lessons'
-
-const lessonItem = object({
-  id: number,
-  pinyin: string,
-  characters: string,
-  en: array(string)
-})
-
-const lesson = object({
-  number: number,
-  title: string,
-  items: array(lessonItem)
-})
-
-type Lesson = $DecoderType<typeof lesson>
-
-const lessonsGuard = guard(array(lesson))
+import { Lesson, lessonsGuard } from '../types/Lesson'
 
 export const getLessons = (): Lesson[] => {
   try {
@@ -27,8 +10,8 @@ export const getLessons = (): Lesson[] => {
   return LESSONS
 }
 
-export const getLesson = (num: number): Lesson | undefined => {
-  return getLessons().find(lesson => lesson.number === num)
+export const getLesson = (num: number): Lesson | null => {
+  return getLessons().find(lesson => lesson.number === num) || null
 }
 
 export const saveLesson = (lesson: Lesson) => {

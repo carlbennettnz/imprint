@@ -38,6 +38,7 @@ export const LessonContents = ({ items, isEditable, updateItem }: LessonContentP
                 // This is actually more stable than item.id due to new
                 // items not being assigned ids until they're saved
                 key={i}
+                index={i}
                 item={item}
                 update={update}
                 editable={isEditable}
@@ -51,7 +52,7 @@ export const LessonContents = ({ items, isEditable, updateItem }: LessonContentP
   )
 }
 
-const LessonItemRow = ({ key, item, update, editable, isLast }: any) => {
+const LessonItemRow = ({ index: key, item, update, editable, isLast }: any) => {
   const cellStyles = 'py-1 text-grey-darkest'
   let inputStyles =
     'w-full border-2 border-transparent focus:border-blue-light outline-none p-2 rounded text-black'
