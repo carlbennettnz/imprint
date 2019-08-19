@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
-import { Quiz } from './Quiz'
-import { Lessons } from './Lessons'
+import { Quiz } from './quiz/Quiz'
+import { Lessons } from './lesson/Lessons'
 
 export const App = () => (
   <div className="py-4">
@@ -19,7 +19,7 @@ export const App = () => (
         exact
       />
       <Route
-        render={({ match }) => <Quiz edit={true} lesson={match.params.lesson} />}
+        render={({ match }) => <Quiz lesson={match.params.lesson} />}
         path="/lessons/:lesson/quiz"
       />
     </Router>

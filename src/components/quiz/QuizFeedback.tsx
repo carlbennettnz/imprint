@@ -6,7 +6,7 @@ type FeedbackProps = {
   complete: boolean
 }
 
-export const Feedback = ({ item, correct, complete }: FeedbackProps) => (
+export const QuizFeedback = ({ item, correct, complete }: FeedbackProps) => (
   <div className="mx-auto">
     <div className="text-center text-xl" data-test-feedback>
       {complete ? 'Lesson complete!' : correct ? 'Correct!' : item.en.join(', ')}

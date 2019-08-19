@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react'
 
 import { LessonsList } from './LessonList'
 import { Lesson } from './Lesson'
-import { getLessons } from '../data/db'
-import { RouterProps, withRouter } from 'react-router'
+import { getLessons } from '../../data/db'
+import { withRouter, RouteComponentProps } from 'react-router'
 
-type LessonsProps = {
+interface LessonsProps extends RouteComponentProps {
   lesson: string
   edit: boolean
-  history: RouterProps['history']
 }
 
-// @ts-ignore
-export const Lessons = withRouter(({ lesson, edit, history }: LessonsProps) => {
+export const Lessons = withRouter<LessonsProps>(({ lesson, edit, history }: LessonsProps) => {
   const [lessons, setLessons] = useState<any>(null)
   const [items, setItems] = useState<any>(null)
 

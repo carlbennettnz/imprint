@@ -5,7 +5,7 @@ type CardProps = {
   characters: string
 }
 
-export const Card = ({ pinyin, characters }: CardProps) => (
+export const QuizCard = ({ pinyin, characters }: CardProps) => (
   <div data-test-card>
     <div data-test-pinyin className="text-xl text-center text-grey-dark">
       {pinyin}

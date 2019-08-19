@@ -44,7 +44,7 @@ export class QuizController {
     let candidate = this.currentQuestionIndex
 
     // Already done
-    if (itemStatuses.every(s => s)) return
+    if (itemStatuses.every(s => s === true)) return
 
     do {
       candidate = (candidate + 1) % itemStatuses.length

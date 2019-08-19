@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
-import { saveLesson } from '../data/db'
+import { saveLesson } from '../../data/db'
 import { LessonControls } from './LessonControls'
-import { LessonContents } from './LessonContents'
-import { withRouter, RouterProps } from 'react-router'
-import { QuizItem } from '../types/QuizItem'
+import { LessonContent } from './LessonContent'
+import { RouterProps } from 'react-router'
+import { QuizItem } from '../../types/Lesson'
 
 type LessonProps = {
   lesson: any
@@ -43,7 +43,7 @@ export function Lesson({ lesson, edit, history }: LessonProps) {
         <LessonControls lesson={lesson} edit={edit} save={save} />
       </header>
 
-      <LessonContents items={items} isEditable={edit} updateItem={updateItem} />
+      <LessonContent items={items} isEditable={edit} updateItem={updateItem} />
     </div>
   )
 }
