@@ -1,3 +1,6 @@
+import PouchDB from 'pouchdb'
+import debug from 'pouchdb-debug'
+
 import { LESSONS, WORDS } from './fixtures'
 import {
   Lesson,
@@ -9,57 +12,88 @@ import {
   attemptsGuard
 } from '../types'
 
-export const getLessons = (): Lesson[] => {
-  const lessons = getRawLessons()
-  const words = getRawWords()
-  const attempts = getAttempts()
+const db = new PouchDB('imprint')
 
-  return lessons.map(lesson => ({
-    ...lesson,
-    items: lesson.items.map(wordId => ({
-      ...words.find(word => word.id === wordId)!,
-      history: attempts.filter(attempt => attempt.word === wordId)
-    }))
-  }))
+PouchDB.plugin(debug)
+PouchDB.debug.enable('*')
+
+export const getLessons = async (): Promise<Lesson[]> => {
+  let lessons: RawLesson[]
+  let words: RawWord[]
+
+  try {
+    ;[lessons, words] = await Promise.all([getRawLessons(), getRawWords()])
+  } catch (err) {
+    console.error(err)
+    lessons = LESSONS
+    words = WORDS
+    await db.bulkDocs([...LESSONS, ...WORDS])
+  }
+
+  return lessons.map(lesson => {
+    const items = lesson.items.map(wordId => words.find(word => word._id === wordId)!)
+    return { ...lesson, items }
+  })
 }
 
-const getRawLessons = (): RawLesson[] => {
+const getRawLessons = async (): Promise<RawLesson[]> => {
   try {
-    return lessonsGuard(JSON.parse(localStorage.lessons))
+    const { rows } = await db.allDocs({
+      startkey: 'lessons/',
+      endkey: 'lessons/\ufff0',
+      include_docs: true
+    })
+
+    return lessonsGuard(rows.map(row => row.doc))
   } catch (err) {
-    localStorage.lessons = JSON.stringify(LESSONS)
+    console.error(err)
+    db.bulkDocs(LESSONS)
     return LESSONS
   }
 }
 
-const getRawWords = (): RawWord[] => {
+const getRawWords = async (): Promise<RawWord[]> => {
   try {
-    return wordsGuard(JSON.parse(localStorage.words))
+    const { rows } = await db.allDocs({
+      startkey: 'words/',
+      endkey: 'words/\ufff0',
+      include_docs: true
+    })
+
+    return wordsGuard(rows.map(row => row.doc))
   } catch (err) {
-    localStorage.words = JSON.stringify(WORDS)
+    console.error(err)
+    db.bulkDocs(WORDS)
     return WORDS
   }
 }
 
-const getAttempts = (): Attempt[] => {
-  try {
-    return attemptsGuard(JSON.parse(localStorage.attempts))
-  } catch (err) {
-    localStorage.attempts = JSON.stringify([])
-    return []
+export interface WordsSummary {
+  learned: number
+  needsReview: number
+  unlearned: number
+}
+
+export const getWordsSummary = async (): Promise<WordsSummary> => {
+  const words = await getRawWords()
+
+  return {
+    learned: words.filter(word => word.status === 'LEARNED').length,
+    needsReview: words.filter(word => word.status === 'NEEDS_REVIEW').length,
+    unlearned: words.filter(word => word.status === 'UNLEARNED').length
   }
 }
 
-export const getLesson = (num: number): Lesson | null => {
-  return getLessons().find(lesson => lesson.number === num) || null
+export const addWords = async (words: RawWord[]) => {
+  return await db.bulkDocs(words)
 }
 
-export const saveLesson = (lesson: Lesson) => {
-  localStorage.lessons = JSON.stringify(
-    getLessons().map(originalLesson =>
-      originalLesson.number === lesson.number ? lesson : originalLesson
-    )
-  )
+export const getLesson = async (num: number): Promise<Lesson | null> => {
+  return (await getLessons()).find(lesson => lesson.number === num) || null
+}
+
+export const saveLesson = async (lesson: Lesson) => {
+  db.put(lesson)
 }
 
 export const getDictionary = (): { [word: string]: any } => {
@@ -71,7 +105,7 @@ export const getDictionary = (): { [word: string]: any } => {
   }
 }
 
-export const upsertWord = (update: any): any => {
+export const upsertWord = (update: Partial<QuizItem>): any => {
   const dict = getDictionary()
   const current = dict[update.characters] || {}
 

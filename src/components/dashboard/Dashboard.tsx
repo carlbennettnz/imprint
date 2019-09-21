@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { getLessons, WordsSummary, getWordsSummary } from '../../data/db'
+import { Lesson } from '../../types'
+import { SummaryCard } from './SummaryCard'
 
 const secondaryButtonStyles = `
   text-grey-darker
@@ -35,16 +38,40 @@ const primaryButtonStyles = `
   overflow-hidden
 `
 
+interface Course {
+  name: string
+  lessons: Lesson[]
+}
+
 export const Dashboard = () => {
+  const [courses, setCourses] = useState<Course[]>([])
+  const [summary, setSummary] = useState<WordsSummary | null>(null)
+
+  useEffect(() => {
+    console.log('loading lessons')
+    getLessons().then(lessons => {
+      const newCourses = lessons.reduce<Course[]>((cs, lesson) => {
+        const course = cs.find(c => c.name === lesson.course)
+        if (!course) return [...cs, { name: lesson.course, lessons: [lesson] }]
+        return cs.map(c => (c === course ? { ...c, lessons: [...c.lessons, lesson] } : c))
+      }, [])
+
+      setCourses(newCourses)
+    }, console.error)
+  }, [])
+
+  useEffect(() => {
+    getWordsSummary().then(setSummary, console.error)
+  }, [])
+
   return (
-    <div className="max-w-lg mx-auto mt-4">
+    <div className="max-w-lg mx-auto mt-4 px-8">
       <header className="flex items-center mb-8">
         <h1 className="max-w-lg mr-auto font-sans text-2xl my-0 text-blue">Imprint</h1>
         <div>
-          <Link to={`/lessons/all/edit`} className={secondaryButtonStyles}>
+          <Link to={`/add-words`} className={secondaryButtonStyles}>
             <u>A</u>dd Words
           </Link>
-
           <Link to={`/lessons/all/quiz`} className={primaryButtonStyles}>
             Revise Now
             <span className="bg-green text-green-lightest p-2 ml-2 -mr-3 -my-2">
@@ -54,94 +81,34 @@ export const Dashboard = () => {
         </div>
       </header>
 
-      <div className="bg-white border border-grey-light rounded overflow-hidden flex mb-8">
-        <div
-          className="border-green border-b-8 p-4 whitespace-no-wrap overflow-hidden truncate"
-          style={{ width: `${(356 / (356 + 89 + 52)) * 100}%` }}
-        >
-          356 words memorised
-        </div>
-        <div
-          className="border-orange border-b-8 p-4 whitespace-no-wrap overflow-hidden truncate ml-1"
-          style={{ width: `${(89 / (356 + 89 + 52)) * 100}%` }}
-        >
-          89 need revision
-        </div>
-        <div
-          className="border-gray border-b-8 p-4 whitespace-no-wrap overflow-hidden truncate ml-1"
-          style={{ width: `${(89 / (356 + 89 + 52)) * 100}%` }}
-        >
-          52 to learn
-        </div>
-      </div>
+      {summary && <SummaryCard summary={summary} />}
 
-      <div>
-        <header className="border-b border-grey py-2 px-4 mb-8">
-          <h2 className="text-lg text-grey-darker">EuroAsia Mandarin 1</h2>
-        </header>
-
-        <div className="flex flex-wrap -m-2">
-          <div
-            className="bg-white border border-grey-light rounded overflow-hidden m-2"
-            style={{ width: 'calc(33.333% - 1rem)' }}
-          >
-            <div className="p-4">
-              <h3 className="text-sm text-grey-dark uppercase mb-1">Lesson 1</h3>
-              <h4 className="text-base text-grey-darker">How are you?</h4>
-            </div>
-          </div>
-
-          <div
-            className="bg-white border border-grey-light rounded overflow-hidden m-2"
-            style={{ width: 'calc(33.333% - 1rem)' }}
-          >
-            <div className="p-4">
-              <h3 className="text-sm text-grey-dark uppercase mb-1">Lesson 2</h3>
-              <h4 className="text-base text-grey-darker">What is your name?</h4>
-            </div>
-          </div>
-
-          <div
-            className="bg-white border border-grey-light rounded overflow-hidden m-2"
-            style={{ width: 'calc(33.333% - 1rem)' }}
-          >
-            <div className="p-4">
-              <h3 className="text-sm text-grey-dark uppercase mb-1">Lesson 3</h3>
-              <h4 className="text-base text-grey-darker">What is your job?</h4>
-            </div>
-          </div>
-
-          <div
-            className="bg-white border border-grey-light rounded overflow-hidden m-2"
-            style={{ width: 'calc(33.333% - 1rem)' }}
-          >
-            <div className="p-4">
-              <h3 className="text-sm text-grey-dark uppercase mb-1">Lesson 4</h3>
-              <h4 className="text-base text-grey-darker">Hobbies</h4>
-            </div>
-          </div>
-
-          <div
-            className="bg-white border border-grey-light rounded overflow-hidden m-2"
-            style={{ width: 'calc(33.333% - 1rem)' }}
-          >
-            <div className="p-4">
-              <h3 className="text-sm text-grey-dark uppercase mb-1">Lesson 5</h3>
-              <h4 className="text-base text-grey-darker">Directions</h4>
-            </div>
-          </div>
-
-          <div
-            className="bg-white border border-grey-light rounded overflow-hidden m-2"
-            style={{ width: 'calc(33.333% - 1rem)' }}
-          >
-            <div className="p-4">
-              <h3 className="text-sm text-grey-dark uppercase mb-1">Lesson 6</h3>
-              <h4 className="text-base text-grey-darker">Food</h4>
-            </div>
+      {courses.map(({ name, lessons }) => (
+        <div key={name}>
+          <header className="border-b border-grey py-2 px-4 mb-8">
+            <h2 className="text-lg text-grey-darker">{name}</h2>
+          </header>
+          <div className="flex flex-wrap -m-2">
+            {lessons.map(lesson => (
+              <Link
+                to={`/${lesson._id}`}
+                key={lesson._id}
+                className="bg-white border border-grey-light rounded overflow-hidden m-2 no-underline hover:shadow hover:bg-blue group transition-faster"
+                style={{ width: 'calc(33.333% - 1rem)' }}
+              >
+                <div className="p-4">
+                  <h3 className="text-sm text-grey-dark uppercase mb-1 group-hover:text-blue-lightest transition-faster">
+                    Lesson {lesson.number}
+                  </h3>
+                  <h4 className="text-base text-inherit text-grey-darker group-hover:text-white  transition-faster">
+                    {lesson.title}
+                  </h4>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
-      </div>
+      ))}
     </div>
   )
 }

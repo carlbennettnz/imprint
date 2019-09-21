@@ -13,10 +13,12 @@ export const LessonContent = ({ items, isEditable, updateItem }: LessonContentPr
     items = [
       ...items,
       {
-        id: 0,
+        _id: '',
         pinyin: '',
         characters: '',
-        en: []
+        en: [],
+        status: 'UNLEARNED',
+        history: []
       }
     ]
   }

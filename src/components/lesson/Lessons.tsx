@@ -16,9 +16,10 @@ export const Lessons = withRouter<LessonsProps>(({ lesson, edit, history }: Less
 
   useEffect(() => {
     if (!lesson) return
-    const ls = getLessons()
-    setLessons(ls)
-    setItems(getCurrentLesson(ls, lesson).items)
+    getLessons().then(ls => {
+      setLessons(ls)
+      setItems(getCurrentLesson(ls, lesson).items)
+    })
   }, [lesson])
 
   if (!lesson || !lessons || !items) return null

@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.0",
     "@types/mocha": "^5.2.7",
+    "@types/pouchdb": "^6.4.0",
     "@types/react": "^16.8.22",
     "@types/react-dom": "^16.8.4",
     "@types/react-router": "^5.0.2",
@@ -32,8 +33,11 @@
   },
   "dependencies": {
     "decoders": "^1.14.0",
+    "glhd-tailwindcss-transitions": "^0.3.0",
     "mobx": "^5.13.0",
     "mobx-react-lite": "^1.4.1",
+    "pouchdb": "^7.1.1",
+    "pouchdb-debug": "^7.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",

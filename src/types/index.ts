@@ -1,24 +1,26 @@
-import { guard, object, array, number, boolean, string, $DecoderType } from 'decoders'
+import { guard, object, array, number, boolean, string, oneOf, $DecoderType } from 'decoders'
 
 const attempt = object({
-  id: number,
-  word: number,
   timestamp: string,
   correct: boolean,
   guess: string
 })
 
 const word = object({
-  id: number,
+  _id: string,
   pinyin: string,
   characters: string,
-  en: array(string)
+  en: array(string),
+  status: oneOf(['LEARNED', 'NEEDS_REVIEW', 'UNLEARNED']),
+  history: array(attempt)
 })
 
 const lesson = object({
+  _id: string,
+  course: string,
   number: number,
   title: string,
-  items: array(number)
+  items: array(string)
 })
 
 export type RawLesson = $DecoderType<typeof lesson>
