@@ -926,10 +926,11 @@ module.exports = {
     svgStroke: [],
     tableLayout: ['responsive'],
     textAlign: ['responsive'],
-    textColors: ['responsive', 'hover', 'focus'],
+    textColors: ['responsive', 'hover', 'focus', 'group-hover'],
     textSizes: ['responsive'],
     textStyle: ['responsive', 'hover', 'focus'],
     tracking: ['responsive'],
+    transitionVariants: ['hover'],
     userSelect: ['responsive'],
     verticalAlign: ['responsive'],
     visibility: ['responsive'],
@@ -958,6 +959,10 @@ module.exports = {
       // center: true,
       // padding: '1rem',
     }),
+
+    require('glhd-tailwindcss-transitions')({
+      transitionVariants: ['hover']
+    })
   ],
 
 

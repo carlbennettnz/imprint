@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react'
-import { QuizItem } from '../../types/Lesson'
+import { QuizItem } from '../../types'
 import { LessonItemRow } from './LessonItemRow'
 
 type LessonContentProps = {
@@ -13,10 +13,12 @@ export const LessonContent = ({ items, isEditable, updateItem }: LessonContentPr
     items = [
       ...items,
       {
-        id: 0,
+        _id: '',
         pinyin: '',
         characters: '',
-        en: []
+        en: [],
+        status: 'UNLEARNED',
+        history: []
       }
     ]
   }

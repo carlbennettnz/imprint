@@ -4,7 +4,7 @@ import { saveLesson } from '../../data/db'
 import { LessonControls } from './LessonControls'
 import { LessonContent } from './LessonContent'
 import { RouterProps } from 'react-router'
-import { QuizItem } from '../../types/Lesson'
+import { QuizItem } from '../../types'
 
 type LessonProps = {
   lesson: any
@@ -18,11 +18,11 @@ export function Lesson({ lesson, edit, history }: LessonProps) {
   const updateItem = (item: QuizItem) => {
     const newItems = items.slice()
     const index =
-      item.id !== 0 ? newItems.findIndex((i: QuizItem) => i.id === item.id) : newItems.length
+      item._id !== '' ? newItems.findIndex((i: QuizItem) => i._id === item._id) : newItems.length
 
     newItems[index] = {
       ...item,
-      id: item.id || Math.floor(Math.random() * 10e12)
+      _id: item._id || `words/${Math.floor(Math.random() * 10e12)}`
     }
 
     setItems(newItems)

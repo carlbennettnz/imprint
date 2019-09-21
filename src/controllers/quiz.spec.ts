@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { QuizController, QuestionStage } from './quiz'
-import { LESSONS } from '../data/lessons'
+import { LESSONS } from '../data/fixtures'
 
 const LONG_LESSON = {
   ...LESSONS[0],
