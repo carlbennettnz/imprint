@@ -5,6 +5,11 @@
     "jsx": "react",
     "strict": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true
-  }
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "pouchdb-debug": ["./types/pouchdb-debug"]
+    }
+  },
+  "include": ["src/**/*"]
 }

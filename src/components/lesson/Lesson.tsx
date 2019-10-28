@@ -5,6 +5,7 @@ import { LessonControls } from './LessonControls'
 import { LessonContent } from './LessonContent'
 import { RouterProps } from 'react-router'
 import { QuizItem } from '../../types'
+import useTask from '../../use-task/use-task'
 
 type LessonProps = {
   lesson: any
@@ -28,10 +29,10 @@ export function Lesson({ lesson, edit, history }: LessonProps) {
     setItems(newItems)
   }
 
-  const save = () => {
-    saveLesson({ ...lesson, items })
+  const saveTask = useTask(function*(lesson, items) {
+    yield saveLesson({ ...lesson, items })
     history.push(location.pathname.replace('/edit', ''))
-  }
+  })
 
   return (
     <div className="w-full">
@@ -40,7 +41,7 @@ export function Lesson({ lesson, edit, history }: LessonProps) {
           Lesson {lesson.number}: {lesson.title}
         </h2>
 
-        <LessonControls lesson={lesson} edit={edit} save={save} />
+        <LessonControls lesson={lesson} edit={edit} save={() => saveTask.run(lesson, items)} />
       </header>
 
       <LessonContent items={items} isEditable={edit} updateItem={updateItem} />

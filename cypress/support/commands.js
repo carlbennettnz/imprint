@@ -23,3 +23,10 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('resetDb', () => {
+  console.log('running reset db')
+  cy.on('window:before:load', win => {
+    win.dbReset = true
+  })
+})

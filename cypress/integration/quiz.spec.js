@@ -3,8 +3,13 @@
 import { resetDb } from '../support/helpers'
 
 context('Quiz', () => {
-  beforeEach(resetDb)
-  beforeEach(() => cy.visit('/lessons/1/quiz'))
+  beforeEach(() => {
+    cy.on('window:before:load', win => {
+      win.resetDb = true
+    })
+
+    cy.visit('/lessons/1/quiz')
+  })
 
   it('shows the correct answer if wrong answer is entered', () => {
     cy.get('[data-test-quiz-input]').type('you')

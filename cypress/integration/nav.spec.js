@@ -1,9 +1,10 @@
 /// <reference types="Cypress" />
 
 context('Nav', () => {
-  it('redircts to /lessons/1 from root', () => {
-    cy.visit('/')
-    cy.location('pathname').should('equal', '/lessons/1')
+  before(() => {
+    cy.on('window:before:load', win => {
+      win.resetDb = true
+    })
   })
 
   it('redircts to /lessons/1 from /lessons', () => {

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { QuizItem } from '../../types'
 import { LessonItemRow } from '../lesson/LessonItemRow'
 import uuid from '../../utils/uuid'
-import { addWords } from '../../data/db'
+import { addWords, getRawWords } from '../../data/db'
+import useTask from '../../use-task/use-task'
 
 const baseButtonStyles = `
 no-underline
@@ -35,11 +36,12 @@ const disabledButtonStyles = `
 
 export const AddWords = () => {
   const [items, setItems] = useState<QuizItem[]>([getBlankItem()])
-  const [isSaving, setIsSaving] = useState(false)
 
   const update = (item: QuizItem) => (delta: Partial<QuizItem>) => {
     const updatedItem = { ...item, ...delta }
-    const newItems = items.map(existing => (existing === item ? updatedItem : existing))
+    const newItems = items.map((existing: QuizItem) =>
+      existing._id === item._id ? updatedItem : existing
+    )
 
     // Add a new blank row at the end if we've edited the existing blank row
     const last = newItems[newItems.length - 1]
@@ -52,28 +54,15 @@ export const AddWords = () => {
     setItems(newItems)
   }
 
-  const save = (event: React.FormEvent<HTMLFormElement>) => {
+  const saveTask = useTask(function*(event: React.FormEvent<HTMLFormElement>, items) {
     event.preventDefault()
-    setIsSaving(true)
-  }
-
-  useEffect(() => {
-    let isMounted = true
-    if (!isSaving) return
 
     const nonBlankItems = items.filter(
-      item => item.characters.length > 0 || item.pinyin.length > 0 || item.en.length > 0
+      (item: QuizItem) => item.characters.length > 0 || item.pinyin.length > 0 || item.en.length > 0
     )
 
-    addWords(nonBlankItems).then(words => {
-      if (!isMounted) return
-      setIsSaving(false)
-    })
-
-    return () => {
-      isMounted = false
-    }
-  }, [isSaving])
+    yield addWords(nonBlankItems)
+  })
 
   return (
     <div className="max-w-lg mx-auto mt-4 px-8 flex flex-grow flex-col">
@@ -81,7 +70,7 @@ export const AddWords = () => {
         <h1 className="max-w-lg font-sans text-xl my-0 text-blue">Add Words</h1>
       </header>
 
-      <form onSubmit={save} className="flex flex-grow flex-col">
+      <form onSubmit={event => saveTask.run(event, items)} className="flex flex-grow flex-col">
         <div className="bg-white border rounded-lg flex-grow">
           <table className="p-4 w-full">
             <tbody>
@@ -90,7 +79,7 @@ export const AddWords = () => {
                   key={item._id}
                   item={item}
                   update={update(item)}
-                  editable={!isSaving}
+                  editable={!saveTask.isRunning}
                   isLast={i < items.length - 1}
                 />
               ))}
@@ -99,9 +88,22 @@ export const AddWords = () => {
         </div>
 
         <div className="flex justify-end py-4">
+          {/* <input
+            value={lessonName}
+            onChange={event => setLessonName(event.target.value)}
+            placeholder="Lesson Name"
+          />
+
           <button
             className={isSaving ? disabledButtonStyles : primaryButtonStyles}
             disabled={isSaving}
+          >
+            Save As Lesson
+          </button> */}
+
+          <button
+            className={saveTask.isRunning ? disabledButtonStyles : primaryButtonStyles}
+            disabled={saveTask.isRunning}
           >
             Save New Words
           </button>
@@ -111,9 +113,10 @@ export const AddWords = () => {
   )
 }
 
-const getBlankItem = () => {
+const getBlankItem = (): QuizItem => {
   return {
     _id: `words/${uuid()}`,
+    _rev: undefined,
     characters: '',
     pinyin: '',
     en: [],

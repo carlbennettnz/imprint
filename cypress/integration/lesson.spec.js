@@ -3,7 +3,11 @@
 import { resetDb } from '../support/helpers'
 
 context('Lesson', () => {
-  beforeEach(resetDb)
+  before(() => {
+    cy.on('window:before:load', win => {
+      win.resetDb = true
+    })
+  })
 
   it('has the correct title', () => {
     cy.visit('/lessons/1')
@@ -53,7 +57,9 @@ context('Lesson', () => {
 
     cy.contains('Save').click()
 
-    cy.visit('/lessons/1')
+    cy.location('pathname').should('equal', '/lessons/1')
+    cy.reload()
+
     cy.get('table input')
       .eq(0)
       .should('have.value', '他')

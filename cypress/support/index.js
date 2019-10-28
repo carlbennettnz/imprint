@@ -13,8 +13,28 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
 import './commands'
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+Cypress.on('window:before:load', win => {
+  win.initForTest = async (db, open, fixtures) => {
+    let insertFixtures = false
+
+    if (win.resetDb) {
+      await db.destroy().then(() => {
+        db = open()
+      })
+
+      insertFixtures = true
+    } else {
+      const { doc_count: docCount } = await db.info()
+      insertFixtures = docCount === 0
+    }
+
+    if (insertFixtures) {
+      // Create with fixtures
+      await db.bulkDocs(fixtures)
+    }
+
+    return db
+  }
+})

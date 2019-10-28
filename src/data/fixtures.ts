@@ -1,6 +1,9 @@
-export const LESSONS = [
+import { RawLesson, QuizItem } from 'src/types'
+
+export const LESSONS: RawLesson[] = [
   {
     _id: 'lessons/1',
+    _rev: undefined,
     course: 'EuroAsia Mandarin 1',
     number: 1,
     title: 'How are you?',
@@ -8,6 +11,7 @@ export const LESSONS = [
   },
   {
     _id: 'lessons/2',
+    _rev: undefined,
     course: 'EuroAsia Mandarin 1',
     number: 2,
     title: 'What is your job?',
@@ -15,6 +19,7 @@ export const LESSONS = [
   },
   {
     _id: 'lessons/3',
+    _rev: undefined,
     course: 'EuroAsia Mandarin 1',
     number: 3,
     title: 'Hobbies',
@@ -22,6 +27,7 @@ export const LESSONS = [
   },
   {
     _id: 'lessons/4',
+    _rev: undefined,
     course: 'EuroAsia Mandarin 1',
     number: 4,
     title: 'Directions',
@@ -29,6 +35,7 @@ export const LESSONS = [
   },
   {
     _id: 'lessons/5',
+    _rev: undefined,
     course: 'EuroAsia Mandarin 1',
     number: 5,
     title: 'Food',
@@ -36,6 +43,7 @@ export const LESSONS = [
   },
   {
     _id: 'lessons/6',
+    _rev: undefined,
     course: 'EuroAsia Mandarin 1',
     number: 6,
     title: 'What is your job?',
@@ -43,9 +51,10 @@ export const LESSONS = [
   }
 ]
 
-export const WORDS = [
+export const WORDS: QuizItem[] = [
   {
     _id: 'words/1',
+    _rev: undefined,
     pinyin: 'wǒ',
     characters: '我',
     en: ['I', 'me', 'myself'],
@@ -54,6 +63,7 @@ export const WORDS = [
   },
   {
     _id: 'words/2',
+    _rev: undefined,
     pinyin: 'nǐ',
     characters: '你',
     en: ['you'],
@@ -62,6 +72,7 @@ export const WORDS = [
   },
   {
     _id: 'words/3',
+    _rev: undefined,
     pinyin: 'zhíyè',
     characters: '职业',
     en: ['profession'],
@@ -70,6 +81,7 @@ export const WORDS = [
   },
   {
     _id: 'words/4',
+    _rev: undefined,
     pinyin: 'gōngzuò',
     characters: '工作',
     en: ['job'],
