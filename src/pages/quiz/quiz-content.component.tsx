@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { QuizController, QuestionStage } from '../../controllers/quiz'
-import { Lesson } from '../../types'
-import { useKeyBinding } from '../../utils/use-key-binding'
+import { QuizController, QuestionStage } from './quiz.controller'
+import { Lesson } from '../../data/types'
+import { useKeyBinding } from '../../shared/use-key-binding.hook'
 
-import { QuizCard } from './QuizCard'
-import { QuizInput } from './QuizInput'
-import { QuizFeedback } from './QuizFeedback'
-import { LessonStatus } from '../lesson/LessonStatus'
-import { QuizHeader } from './QuizHeader'
+import { QuizCard } from './quiz-card.component'
+import { QuizInput } from './quiz-input.component'
+import { QuizFeedback } from './quiz-feedback.component'
+import { LessonStatus } from '../lesson/lesson-status.component'
+import { QuizHeader } from './quiz-header.component'
 
 const ENTER_KEYCODE = 13
 

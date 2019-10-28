@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react'
-import { QuizItem } from '../../types'
+import { QuizItem } from '../../data/types'
 
 interface LessonItemRowProps {
   item: QuizItem

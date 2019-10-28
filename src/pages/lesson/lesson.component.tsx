@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 import { saveLesson } from '../../data/db'
-import { LessonControls } from './LessonControls'
-import { LessonContent } from './LessonContent'
+import { LessonControls } from './lesson-controls.component'
+import { LessonContent } from './lesson-content.component'
 import { RouterProps } from 'react-router'
-import { QuizItem } from '../../types'
-import useTask from '../../use-task/use-task'
+import { QuizItem } from '../../data/types'
+import useTask from '../../shared/use-task.hook'
 
 type LessonProps = {
   lesson: any

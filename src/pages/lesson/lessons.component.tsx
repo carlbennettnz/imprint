@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-import { LessonsList } from './LessonList'
-import { Lesson } from './Lesson'
+import { LessonsList } from './lesson-list.component'
+import { Lesson } from './lesson.component'
 import { getLessons } from '../../data/db'
 import { withRouter, RouteComponentProps } from 'react-router'
 

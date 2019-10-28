@@ -1,6 +1,6 @@
 import React from 'react'
-import { QuizItem } from '../../types'
-import { LessonItemRow } from './LessonItemRow'
+import { QuizItem } from '../../data/types'
+import { LessonItemRow } from './lesson-item-row.component'
 
 type LessonContentProps = {
   items: QuizItem[]

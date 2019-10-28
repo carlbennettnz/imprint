@@ -1,10 +1,10 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
-import { Dashboard } from './dashboard/Dashboard'
-import { Lessons } from './lesson/Lessons'
-import { Quiz } from './quiz/Quiz'
-import { AddWords } from './add-words/AddWords'
+import { Dashboard } from './pages/dashboard/dashboard.component'
+import { Lessons } from './pages/lesson/lessons.component'
+import { Quiz } from './pages/quiz/quiz.component'
+import { AddWords } from './pages/add-words/add-words.component'
 
 export const App = () => (
   <div className="py-4 min-h-screen flex">

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getLessons, WordsSummary, getWordsSummary } from '../../data/db'
-import { Lesson } from '../../types'
-import { SummaryCard } from './SummaryCard'
+import { Lesson } from '../../data/types'
+import { SummaryCard } from './summary-card.component'
 
 const secondaryButtonStyles = `
   text-grey-darker

@@ -1,4 +1,4 @@
-import { RawLesson, QuizItem } from 'src/types'
+import { RawLesson, QuizItem } from 'src/data/types'
 
 export const LESSONS: RawLesson[] = [
   {

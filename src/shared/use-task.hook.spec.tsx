@@ -1,7 +1,7 @@
 import React from 'react'
 import { create, act } from 'react-test-renderer'
 
-import useTask, { Task } from './use-task'
+import useTask, { Task } from './use-task.hook'
 
 const nextTick = () => new Promise(r => process.nextTick(r))
 

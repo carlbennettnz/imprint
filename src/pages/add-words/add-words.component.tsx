@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { QuizItem } from '../../types'
-import { LessonItemRow } from '../lesson/LessonItemRow'
-import uuid from '../../utils/uuid'
-import { addWords, getRawWords } from '../../data/db'
-import useTask from '../../use-task/use-task'
+import React, { useState } from 'react'
+import { QuizItem } from '../../data/types'
+import { LessonItemRow } from '../lesson/lesson-item-row.component'
+import uuid from '../../shared/uuid.util'
+import { addWords } from '../../data/db'
+import useTask from '../../shared/use-task.hook'
 
 const baseButtonStyles = `
 no-underline

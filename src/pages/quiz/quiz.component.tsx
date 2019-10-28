@@ -4,9 +4,9 @@ import { RouteComponentProps } from 'react-router'
 
 import { getLesson } from '../../data/db'
 
-import { QuizContent } from './QuizContent'
-import { Lesson } from '../../types'
-import useTask from '../../use-task/use-task'
+import { QuizContent } from './quiz-content.component'
+import { Lesson } from '../../data/types'
+import useTask from '../../shared/use-task.hook'
 
 interface QuizProps extends RouteComponentProps {
   lesson: string

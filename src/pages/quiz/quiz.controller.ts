@@ -1,4 +1,4 @@
-import { Lesson, QuizItem } from '../types'
+import { Lesson, QuizItem } from '../../data/types'
 import { observable, computed } from 'mobx'
 
 export class QuizController {

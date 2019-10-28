@@ -1,7 +1,7 @@
 import PouchDB from 'pouchdb'
 import debug from 'pouchdb-debug'
 
-import { Lesson, lessonsGuard, RawLesson, wordsGuard, RawWord, QuizItem, Attempt } from '../types'
+import { Lesson, lessonsGuard, RawLesson, wordsGuard, RawWord, QuizItem, Attempt } from './types'
 import { LESSONS, WORDS } from './fixtures'
 
 const open = () => new PouchDB('imprint')

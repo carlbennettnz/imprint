@@ -1,5 +1,5 @@
-import { QuizController, QuestionStage } from './quiz'
-import { LESSONS as RAW_LESSONS, WORDS } from '../data/fixtures'
+import { QuizController, QuestionStage } from './quiz.controller'
+import { LESSONS as RAW_LESSONS, WORDS } from '../../data/fixtures'
 
 const LESSONS = RAW_LESSONS.map(lesson => ({
   ...lesson,
