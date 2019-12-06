@@ -48,7 +48,6 @@ export const Dashboard = () => {
   const [summary, setSummary] = useState<WordsSummary | null>(null)
 
   useEffect(() => {
-    console.log('loading lessons')
     getLessons().then(lessons => {
       const newCourses = lessons.reduce<Course[]>((cs, lesson) => {
         const course = cs.find(c => c.name === lesson.course)
