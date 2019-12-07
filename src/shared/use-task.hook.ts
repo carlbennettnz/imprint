@@ -7,7 +7,7 @@ export class Task {
   private hasRunForMount = false
   private running: Iterator<any, any, any>[] = []
 
-  constructor(private generator: (...args: any[]) => Iterator<any, void, any>) {}
+  constructor(public generator: (...args: any[]) => Iterator<any, void, any>) {}
 
   run = async (...args: any[]): Promise<void> => {
     if (this.doDrop && this.running.length > 0) {
@@ -73,6 +73,10 @@ export class Task {
 export default (taskFn: (...args: any[]) => Iterator<any, void, any>): Task => {
   // Create the task once and store in component state
   const task = useState(() => new Task(taskFn))[0]
+
+  useEffect(() => {
+    task.generator = taskFn
+  })
 
   // Stop the task on unmount
   useEffect(() => {

@@ -92,9 +92,32 @@ export const getWordsSummary = async (): Promise<WordsSummary> => {
   }
 }
 
-export const addWords = async (words: RawWord[]) => {
+export const addLesson = async (lesson: Lesson) => {
+  await addWords(lesson.items)
+
+  const rawLesson: RawLesson = {
+    ...lesson,
+    items: lesson.items.map(item => item._id)
+  }
+
+  if (rawLesson.number < 1) {
+    const existing = await getRawLessons()
+    const highestNum = existing
+      .filter(l => l.course === rawLesson.course)
+      .reduce((highest, l) => Math.max(highest, l.number), 0)
+
+    rawLesson.number = highestNum + 1
+  }
+
+  console.log(rawLesson)
+
+  await db.put(rawLesson)
+}
+
+export const addWords = async (words: QuizItem[]) => {
   for (const word of words) {
     delete word._rev
+    word.history = []
   }
   return await db.bulkDocs(words)
 }
