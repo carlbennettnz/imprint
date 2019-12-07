@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { QuizItem } from '../../data/types'
-import { LessonItemRow } from '../lesson/lesson-item-row.component'
 import uuid from '../../shared/uuid.util'
 import { addWords } from '../../data/db'
 import useTask from '../../shared/use-task.hook'
+import { withRouter, RouteComponentProps } from 'react-router'
+import { LessonItemRow } from '../lesson/lesson-item-row.component'
 
 const baseButtonStyles = `
 no-underline
@@ -34,7 +35,7 @@ const disabledButtonStyles = `
   cursor-default
 `
 
-export const AddWords = () => {
+export const AddWords = withRouter<RouteComponentProps>(({ history }) => {
   const [items, setItems] = useState<QuizItem[]>([getBlankItem()])
 
   const update = (item: QuizItem) => (delta: Partial<QuizItem>) => {
@@ -62,6 +63,8 @@ export const AddWords = () => {
     )
 
     yield addWords(nonBlankItems)
+
+    history.push('/')
   })
 
   return (
@@ -111,7 +114,7 @@ export const AddWords = () => {
       </form>
     </div>
   )
-}
+})
 
 const getBlankItem = (): QuizItem => {
   return {
