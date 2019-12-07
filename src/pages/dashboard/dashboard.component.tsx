@@ -64,7 +64,7 @@ export const Dashboard = () => {
   }, [])
 
   return (
-    <div className="max-w-lg mx-auto mt-4 px-8">
+    <div className="max-w-lg w-full mx-auto mt-4 px-8">
       <header className="flex items-center mb-8">
         <h1 className="max-w-lg mr-auto font-sans text-2xl my-0 text-blue">Imprint</h1>
         <div>
