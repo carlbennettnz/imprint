@@ -49,6 +49,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     getLessons().then(lessons => {
+      console.log(lessons)
       const newCourses = lessons.reduce<Course[]>((cs, lesson) => {
         const course = cs.find(c => c.name === lesson.course)
         if (!course) return [...cs, { name: lesson.course, lessons: [lesson] }]
@@ -84,7 +85,7 @@ export const Dashboard = () => {
 
       {courses.map(({ name, lessons }) => (
         <div key={name}>
-          <header className="border-b border-grey py-2 px-4 mb-8">
+          <header className="border-b border-grey py-2 px-4 my-8">
             <h2 className="text-lg text-grey-darker">{name}</h2>
           </header>
           <div className="flex flex-wrap -m-2">
