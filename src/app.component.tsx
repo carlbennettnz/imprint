@@ -2,14 +2,14 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
 import { Dashboard } from './pages/dashboard/dashboard.component'
-import { Lessons } from './pages/lesson/lessons.component'
+import { Lessons } from './pages/lesson/lesson.component'
 import { Quiz } from './pages/quiz/quiz.component'
 import { AddWords } from './pages/add-words/add-words.component'
 
 export const App = () => (
   <div className="py-4 min-h-screen flex">
     <Router>
-      {['/lessons'].includes(location.pathname) && <Redirect to="/lessons/1" />}
+      {/* location.pathname === '/lessons' && <Redirect to="/lessons/1" /> */}
       <Route component={Dashboard} path="/" exact />
       <Route component={AddWords} path="/add-words" exact />
       <Route

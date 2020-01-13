@@ -22,8 +22,8 @@ const primaryButtonStyles =
 
 function EditModeLessonControls({ save, lesson }: { save: () => void; lesson: any }) {
   return (
-    <Fragment>
-      <Link to={`/lessons/${lesson.number}`} className={secondaryButtonStyles}>
+    <div className="flex">
+      <Link to={`/${lesson._id}`} className={secondaryButtonStyles}>
         Cancel
         <span className="bg-grey text-grey-lightest p-2 ml-3 -mr-3 -my-2 normal-case">
           <span style={{ position: 'relative', top: 0 }}>esc</span>
@@ -36,26 +36,26 @@ function EditModeLessonControls({ save, lesson }: { save: () => void; lesson: an
           <span style={{ position: 'relative', top: 2 }}>↩</span>
         </span>
       </a>
-    </Fragment>
+    </div>
   )
 }
 
 export function ReadModeLessonControls({ lesson }: { lesson: any }) {
   return (
-    <Fragment>
-      <Link to={`/lessons/${lesson.number}/edit`} className={secondaryButtonStyles}>
+    <div className="flex">
+      <Link to={`/${lesson._id}/edit`} className={secondaryButtonStyles}>
         Edit
         <span className="bg-grey text-grey-lightest p-2 ml-3 -mr-3 -my-2 normal-case">
           <span style={{ position: 'relative', top: 0 }}>e</span>
         </span>
       </Link>
 
-      <Link to={`/lessons/${lesson.number}/quiz`} className={primaryButtonStyles}>
+      <Link to={`/${lesson._id}/quiz`} className={primaryButtonStyles}>
         ▶&nbsp;&nbsp;Start
         <span className="bg-green text-green-lightest p-2 ml-2 -mr-3 -my-2">
           <span style={{ position: 'relative', top: 2 }}>↩</span>
         </span>
       </Link>
-    </Fragment>
+    </div>
   )
 }

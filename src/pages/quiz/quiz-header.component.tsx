@@ -4,10 +4,13 @@ import { Link } from 'react-router-dom'
 type QuizHeaderProps = { lesson: any }
 
 export const QuizHeader = ({ lesson }: QuizHeaderProps) => (
-  <header className="max-w-md mx-auto px-8 py-4 flex">
-    <Link to="/" className="text-grey-dark hover:text-blue no-underline cursor-pointer mr-4">
-      ← Lessons
+  <header className="flex items-center h-8 mt-4 mb-16 pb-8 border-b">
+    <Link to="/" className="font-sans text-xl my-0 text-blue no-underline font-bold">
+      Imprint
     </Link>
-    <h2 className="text-base text-grey-darker">Lesson {lesson.number}</h2>
+    <span className="text-sm pt-1 text-grey px-4">▶</span>
+    <h1 className="font-sans font-normal text-xl my-0 text-grey-darker">{lesson.course}</h1>
+    <span className="text-sm pt-1 text-grey px-4">▶</span>
+    <h1 className="font-sans font-normal text-xl my-0 text-grey-darker mr-auto">{lesson.title}</h1>
   </header>
 )

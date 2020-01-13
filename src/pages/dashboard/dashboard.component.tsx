@@ -19,6 +19,7 @@ const secondaryButtonStyles = `
   border-transparent
   border-grey
   ml-auto
+  flex
 `
 
 const primaryButtonStyles = `
@@ -36,6 +37,7 @@ const primaryButtonStyles = `
   font-bold
   uppercase
   overflow-hidden
+  flex
 `
 
 interface Course {
@@ -49,7 +51,6 @@ export const Dashboard = () => {
 
   useEffect(() => {
     getLessons().then(lessons => {
-      console.log(lessons)
       const newCourses = lessons.reduce<Course[]>((cs, lesson) => {
         const course = cs.find(c => c.name === lesson.course)
         if (!course) return [...cs, { name: lesson.course, lessons: [lesson] }]
@@ -66,9 +67,10 @@ export const Dashboard = () => {
 
   return (
     <div className="max-w-lg w-full mx-auto mt-4 px-8">
-      <header className="flex items-center mb-8">
+      <header className="flex items-center mb-8 h-8">
         <h1 className="max-w-lg mr-auto font-sans text-xl my-0 text-blue">Imprint</h1>
-        <div>
+
+        <div className="flex items-center">
           <Link to={`/add-words`} className={secondaryButtonStyles}>
             <u>A</u>dd Words
           </Link>

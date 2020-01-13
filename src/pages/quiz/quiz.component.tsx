@@ -13,23 +13,22 @@ interface QuizProps extends RouteComponentProps {
 }
 
 export const Quiz = withRouter<QuizProps>((props: QuizProps) => {
-  const lessonNumber = parseLessonNumber(props.lesson)
   const [lesson, setLesson] = useState<Lesson | null>(null)
 
-  useTask(function*() {
-    if (!lessonNumber) return
-    setLesson(yield getLesson(lessonNumber))
+  const loadTask = useTask(function*() {
+    if (!props.lesson) return
+    setLesson(yield getLesson(props.lesson))
   }).onMount()
 
-  return lesson ? (
-    <QuizContent lesson={lesson} route={props.history.push} />
-  ) : (
-    <h1>Lesson not found</h1>
+  if (loadTask?.isRunning) return null
+
+  return (
+    <div className="max-w-lg w-full mx-auto mt-4 px-8">
+      {lesson ? (
+        <QuizContent lesson={lesson} route={props.history.push} />
+      ) : (
+        <h1>Lesson not found</h1>
+      )}
+    </div>
   )
 })
-
-const parseLessonNumber = (str: string): number | null => {
-  const number = parseInt(str, 10)
-
-  return !isNaN(number) && number != null && number >= 0 && number < Infinity ? number : null
-}

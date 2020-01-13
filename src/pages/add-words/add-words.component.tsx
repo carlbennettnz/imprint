@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { QuizItem, Lesson } from '../../data/types'
 import uuid from '../../shared/uuid.util'
-import { addWords, addLesson } from '../../data/db'
+import { addLesson } from '../../data/db'
 import useTask from '../../shared/use-task.hook'
 import { withRouter, RouteComponentProps } from 'react-router'
 import { LessonItemRow } from '../lesson/lesson-item-row.component'
@@ -107,8 +107,8 @@ export const AddWords = withRouter<RouteComponentProps>(({ history }) => {
   })
 
   return (
-    <div className="max-w-lg mx-auto mt-4 px-8 flex flex-grow flex-col">
-      <header className="flex items-center mb-8">
+    <div className="max-w-lg w-full mx-auto mt-4 px-8 flex flex-grow flex-col">
+      <header className="flex items-center mb-8 h-8">
         <Link to="/" className="font-sans text-xl my-0 text-blue no-underline font-bold">
           Imprint
         </Link>

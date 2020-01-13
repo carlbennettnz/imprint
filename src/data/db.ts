@@ -1,7 +1,16 @@
 import PouchDB from 'pouchdb'
 import debug from 'pouchdb-debug'
 
-import { Lesson, lessonsGuard, RawLesson, wordsGuard, RawWord, QuizItem, Attempt } from './types'
+import {
+  Lesson,
+  lessonsGuard,
+  RawLesson,
+  wordsGuard,
+  RawWord,
+  QuizItem,
+  Attempt,
+  lessonGuard
+} from './types'
 import { LESSONS, WORDS } from './fixtures'
 
 const open = () => new PouchDB('imprint')
@@ -33,17 +42,19 @@ export const getLessons = async (): Promise<Lesson[]> => {
     ;[lessons, words] = await Promise.all([getRawLessons(), getRawWords()])
   } catch (err) {
     console.error(err)
-    lessons = []
+    return []
   }
 
-  return lessons.map(lesson => {
-    const items = lesson.items.map(wordId => {
-      const word = words.find(word => word._id === wordId)!
-      return { ...word, history: [] }
-    })
+  return lessons.map(buildLesson(words))
+}
 
-    return { ...lesson, items }
+const buildLesson = (words: RawWord[]) => (lesson: RawLesson): Lesson => {
+  const items = lesson.items.map(wordId => {
+    const word = words.find(word => word._id === wordId)!
+    return { ...word, history: [] }
   })
+
+  return { ...lesson, items }
 }
 
 const getRawLessons = async (): Promise<RawLesson[]> => {
@@ -122,8 +133,11 @@ export const addWords = async (words: QuizItem[]) => {
   return await db.bulkDocs(words)
 }
 
-export const getLesson = async (num: number): Promise<Lesson | null> => {
-  return (await getLessons()).find(lesson => lesson.number === num) || null
+export const getLesson = async (id: string): Promise<Lesson | null> => {
+  const words = await getRawWords()
+  const lesson = lessonGuard(await db.get(`lessons/${id}`))
+
+  return lesson ? buildLesson(words)(lesson) : null
 }
 
 export const saveLesson = async (lesson: Lesson) => {

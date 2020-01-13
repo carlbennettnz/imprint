@@ -25,7 +25,7 @@ export const LessonContent = ({ items, isEditable, updateItem }: LessonContentPr
   }
 
   return (
-    <div className="bg-white border rounded-lg mt-4">
+    <div className="bg-white border rounded-lg">
       <table className="p-4 w-full">
         <tbody>
           {items.map((item: QuizItem, i: number) => (

@@ -43,6 +43,7 @@ export type Attempt = $DecoderType<typeof attempt>
 export type QuizItem = Omit<RawWord, 'history'> & { history: Attempt[] }
 export type Lesson = Omit<RawLesson, 'items'> & { items: QuizItem[] }
 
+export const lessonGuard = guard(lesson)
 export const lessonsGuard = guard(array(lesson))
 export const wordsGuard = guard(array(word))
 export const attemptsGuard = guard(array(attempt))

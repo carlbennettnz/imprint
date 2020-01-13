@@ -27,7 +27,7 @@ export const QuizContent = observer(({ lesson, route }: QuizContentProps) => {
     event.preventDefault()
 
     if (quiz.isComplete) {
-      route(`/lessons/${lesson.number}`)
+      route(`/${lesson._id}`)
     } else {
       quiz.advance()
     }
