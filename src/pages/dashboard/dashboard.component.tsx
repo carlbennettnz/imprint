@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getLessons, WordsSummary, getWordsSummary } from '../../data/db'
 import { Lesson } from '../../data/types'
 import { SummaryCard } from './summary-card.component'
+import useTask from '../../shared/use-task.hook'
 
 const secondaryButtonStyles = `
   text-grey-darker
@@ -49,21 +50,21 @@ export const Dashboard = () => {
   const [courses, setCourses] = useState<Course[]>([])
   const [summary, setSummary] = useState<WordsSummary | null>(null)
 
-  useEffect(() => {
-    getLessons().then(lessons => {
-      const newCourses = lessons.reduce<Course[]>((cs, lesson) => {
-        const course = cs.find(c => c.name === lesson.course)
-        if (!course) return [...cs, { name: lesson.course, lessons: [lesson] }]
-        return cs.map(c => (c === course ? { ...c, lessons: [...c.lessons, lesson] } : c))
-      }, [])
+  useTask(function*() {
+    const [lessons, wordsSummary]: [Lesson[], WordsSummary] = yield Promise.all([
+      getLessons(),
+      getWordsSummary()
+    ])
 
-      setCourses(newCourses)
-    }, console.error)
-  }, [])
+    const newCourses = lessons.reduce<Course[]>((cs, lesson) => {
+      const course = cs.find(c => c.name === lesson.course)
+      if (!course) return [...cs, { name: lesson.course, lessons: [lesson] }]
+      return cs.map(c => (c === course ? { ...c, lessons: [...c.lessons, lesson] } : c))
+    }, [])
 
-  useEffect(() => {
-    getWordsSummary().then(setSummary, console.error)
-  }, [])
+    setCourses(newCourses)
+    setSummary(wordsSummary)
+  }).onMount()
 
   return (
     <div className="max-w-lg w-full mx-auto mt-4 px-8">
