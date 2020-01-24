@@ -118,7 +118,7 @@ export const Dashboard = ({ edit }: DashboardProps) => {
     }
 
     const [moved] = fromLessons.splice(movedIdx, 1)
-    moved.number = result.destination.index
+    moved.number = result.destination.index || 1
     moved.course = result.destination.droppableId
     toLessons.push(moved)
 
@@ -174,15 +174,17 @@ export const Dashboard = ({ edit }: DashboardProps) => {
       {summary && !edit && <SummaryCard summary={summary} />}
 
       <DragDropContext onDragEnd={onDragEnd}>
-        {courses.map(course => (
-          <Course
-            key={course.name}
-            course={course}
-            edit={edit}
-            saveCourse={saveCourse.run}
-            deleteCourse={deleteCourse.run}
-          />
-        ))}
+        {courses
+          .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
+          .map(course => (
+            <Course
+              key={course.name}
+              course={course}
+              edit={edit}
+              saveCourse={saveCourse.run}
+              deleteCourse={deleteCourse.run}
+            />
+          ))}
       </DragDropContext>
     </div>
   )
