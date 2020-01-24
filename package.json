@@ -10,7 +10,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "build": "rm -f dist/* && parcel build src/index.html",
-    "serve": "cd dist && serve --single --port 1234",
+    "serve": "cd dist && serve --single -l 1234",
     "deploy": "surge ./dist imprint.carl.nz"
   },
   "devDependencies": {
