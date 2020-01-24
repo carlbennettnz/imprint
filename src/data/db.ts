@@ -155,6 +155,15 @@ export const saveLesson = async (lesson: Lesson) => {
   await db.bulkDocs([rawLesson, ...rawWords, ...history])
 }
 
+export const deleteLesson = async ({ _id, _rev }: Lesson) => {
+  if (typeof _rev !== 'string') {
+    throw new Error('lesson does not have a _rev')
+  }
+
+  await ready
+  await db.remove(_id, _rev)
+}
+
 // OLD LOCALSTORAGE STUFF
 
 export const getDictionary = (): { [word: string]: any } => {
