@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('Add Words', () => {
+context.skip('Add Words', () => {
   before(() => {
     cy.on('window:before:load', win => {
       win.resetDb = true

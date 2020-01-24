@@ -2,7 +2,7 @@
 
 import { resetDb } from '../support/helpers'
 
-context('Lesson', () => {
+context.skip('Lesson', () => {
   before(() => {
     cy.on('window:before:load', win => {
       win.resetDb = true

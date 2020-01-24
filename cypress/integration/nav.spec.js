@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('Nav', () => {
+context.skip('Nav', () => {
   before(() => {
     cy.on('window:before:load', win => {
       win.resetDb = true

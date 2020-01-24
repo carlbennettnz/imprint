@@ -2,7 +2,7 @@
 
 import { resetDb } from '../support/helpers'
 
-context('Quiz', () => {
+context.skip('Quiz', () => {
   beforeEach(() => {
     cy.on('window:before:load', win => {
       win.resetDb = true
